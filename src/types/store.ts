@@ -103,6 +103,8 @@ export interface StoreSettings {
   supportEmail: string;
   supportPhone: string;
   announcementText: string;
+  announcementCoupon: string;
+  announcementDiscount: number;
   
   // Hero Section copy
   heroBadge: string;

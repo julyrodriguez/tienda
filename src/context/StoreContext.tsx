@@ -100,6 +100,8 @@ export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   supportEmail: 'alertasjariel@gmail.com',
   supportPhone: '+54 11 4567-8900',
   announcementText: '20% OFF Inauguración con cupón MODERNA20 • Envíos gratis desde $250.000 • Hasta 12 cuotas sin interés',
+  announcementCoupon: 'MODERNA20',
+  announcementDiscount: 20,
   heroBadge: 'Colección Minimalista 2026',
   heroTitle: 'Tecnología de élite,',
   heroTitleHighlight: 'en su expresión más pura.',
@@ -334,6 +336,20 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Coupons
   const applyCoupon = (code: string) => {
     const formatted = code.trim().toUpperCase();
+
+    // Check if it matches the store's customized promotional coupon
+    const customCode = (settings.announcementCoupon || 'MODERNA20').trim().toUpperCase();
+    if (formatted === customCode) {
+      const customCoupon: Coupon = {
+        code: customCode,
+        discountType: 'percentage',
+        discountValue: settings.announcementDiscount || 20,
+        description: `${settings.announcementDiscount || 20}% OFF de inauguración`
+      };
+      setAppliedCoupon(customCoupon);
+      return { success: true, message: `¡Cupón ${customCode} aplicado con éxito!` };
+    }
+
     const found = AVAILABLE_COUPONS.find(c => c.code === formatted);
 
     if (!found) {

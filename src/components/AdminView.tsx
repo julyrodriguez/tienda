@@ -55,6 +55,8 @@ export const AdminView: React.FC = () => {
     supportEmail: settings.supportEmail,
     supportPhone: settings.supportPhone,
     announcementText: settings.announcementText,
+    announcementCoupon: settings.announcementCoupon || 'MODERNA20',
+    announcementDiscount: settings.announcementDiscount || 20,
     heroBadge: settings.heroBadge,
     heroTitle: settings.heroTitle,
     heroTitleHighlight: settings.heroTitleHighlight,
@@ -381,6 +383,43 @@ export const AdminView: React.FC = () => {
                   placeholder="20% OFF con cupón MODERNA20 • Envíos gratis desde $250.000..."
                   className="w-full px-4 py-2.5 rounded-xl border border-[#E8E1D5] bg-[#FAF7F2] text-[#1C1917] text-sm focus:outline-none focus:ring-2 focus:ring-[#BA9971]"
                 />
+              </div>
+
+              {/* Promotional Coupon Settings */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                <div>
+                  <label className="block text-xs font-bold text-[#1C1917] mb-1.5">
+                    Código del Cupón Promocional (Botón Copiar)
+                  </label>
+                  <input
+                    type="text"
+                    value={brandForm.announcementCoupon}
+                    onChange={(e) => setBrandForm({ ...brandForm, announcementCoupon: e.target.value.toUpperCase() })}
+                    placeholder="MODERNA20"
+                    className="w-full px-4 py-2.5 rounded-xl border border-[#E8E1D5] bg-[#FAF7F2] text-[#1C1917] text-sm font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#BA9971]"
+                  />
+                  <span className="text-[11px] text-[#78716C] mt-1 block">
+                    Es el código que se muestra en el botón "CUPÓN: ..." y que se copia al portapapeles.
+                  </span>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#1C1917] mb-1.5">
+                    Porcentaje de Descuento del Cupón (%)
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={100}
+                    value={brandForm.announcementDiscount}
+                    onChange={(e) => setBrandForm({ ...brandForm, announcementDiscount: Number(e.target.value) || 20 })}
+                    placeholder="20"
+                    className="w-full px-4 py-2.5 rounded-xl border border-[#E8E1D5] bg-[#FAF7F2] text-[#1C1917] text-sm font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#BA9971]"
+                  />
+                  <span className="text-[11px] text-[#78716C] mt-1 block">
+                    Porcentaje que se descuenta automáticamente en el checkout al aplicar este cupón.
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -885,6 +924,8 @@ export const AdminView: React.FC = () => {
                       supportEmail: 'alertasjariel@gmail.com',
                       supportPhone: '+54 11 4567-8900',
                       announcementText: '20% OFF Inauguración con cupón MODERNA20 • Envíos gratis desde $250.000 • Hasta 12 cuotas sin interés',
+                      announcementCoupon: 'MODERNA20',
+                      announcementDiscount: 20,
                       heroBadge: 'Colección Minimalista 2026',
                       heroTitle: 'Tecnología de élite,',
                       heroTitleHighlight: 'en su expresión más pura.',

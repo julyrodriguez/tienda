@@ -6,13 +6,15 @@ export const MarqueeBanner: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const { settings, formatPrice, addToast } = useStore();
 
+  const couponCode = (settings.announcementCoupon || 'MODERNA20').trim();
+
   const copyCoupon = (code: string) => {
     navigator.clipboard.writeText(code);
     setCopied(true);
     addToast({
       type: 'success',
       title: '¡Cupón copiado!',
-      description: `Usa ${code} al finalizar para 20% OFF.`,
+      description: `Usa ${code} al finalizar para ${settings.announcementDiscount || 20}% OFF.`,
     });
     setTimeout(() => setCopied(false), 2500);
   };
@@ -36,11 +38,11 @@ export const MarqueeBanner: React.FC = () => {
           </span>
           <span className="text-[#D8D0C5]">•</span>
           <button
-            onClick={() => copyCoupon('MODERNA20')}
+            onClick={() => copyCoupon(couponCode)}
             className="group inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/80 hover:bg-white border border-[#D8D0C5] transition-all cursor-pointer font-mono text-[11px] text-[#1C1917] shadow-xs"
           >
             <span className="text-[#78716C] text-[10px]">CUPÓN:</span>
-            <span className="font-bold text-[#C25E38] tracking-wider">MODERNA20</span>
+            <span className="font-bold text-[#C25E38] tracking-wider">{couponCode}</span>
             {copied ? (
               <Check className="w-3 h-3 text-[#0F766E]" />
             ) : (
