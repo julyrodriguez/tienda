@@ -26,7 +26,12 @@ export const FeaturedCategories: React.FC = () => {
   const { selectedCategory, setSelectedCategory, products } = useStore();
 
   return (
-    <div className="py-4 sm:py-6 border-b border-[#E8E1D5] bg-[#FAF7F2]">
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.25, ease: 'easeOut' }}
+      className="py-4 sm:py-6 border-b border-[#E8E1D5] bg-[#FAF7F2]"
+    >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-3 mb-3 sm:mb-4">
           <div>
@@ -76,6 +81,6 @@ export const FeaturedCategories: React.FC = () => {
           })}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import {
   ArrowRight,
   ShieldCheck,
@@ -41,26 +42,46 @@ export const HeroSection: React.FC = () => {
           <div className="lg:col-span-7 space-y-4 sm:space-y-6 text-center lg:text-left">
             
             {/* Pill Tag */}
-            <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-[#F4ECE0] border border-[#E8E1D5] text-[11px] sm:text-xs font-bold text-[#78350F] shadow-xs">
+            <motion.div
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-[#F4ECE0] border border-[#E8E1D5] text-[11px] sm:text-xs font-bold text-[#78350F] shadow-xs"
+            >
               <Sparkles className="w-3.5 h-3.5 text-[#C25E38]" />
               <span>Colección Minimalista 2026 • Sonido & Wearables de Precisión</span>
-            </div>
+            </motion.div>
 
             {/* Main Headline */}
-            <h1 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.15] text-[#1C1917]">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+              className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.15] text-[#1C1917]"
+            >
               Tecnología de élite,{' '}
               <span className="text-gradient-warm">
                 en su expresión más pura.
               </span>
-            </h1>
+            </motion.h1>
 
             {/* Subtitle */}
-            <p className="text-[#57534E] text-sm sm:text-base lg:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+              className="text-[#57534E] text-sm sm:text-base lg:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal"
+            >
               Comercio electrónico de última generación conectado a tu servidor y base de datos MongoDB. Experiencias ultrarrápidas, checkout guiado en 3 pasos y envíos prioritarios en 24 horas.
-            </p>
+            </motion.p>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 sm:gap-4 pt-1 sm:pt-2">
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}
+              className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 sm:gap-4 pt-1 sm:pt-2"
+            >
               <a
                 href="#catalogo"
                 className="flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3.5 sm:py-4 rounded-2xl bg-[#1C1917] hover:bg-[#292524] text-[#FAF7F2] font-bold text-xs sm:text-sm shadow-md transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
@@ -78,10 +99,15 @@ export const HeroSection: React.FC = () => {
                   <ChevronRight className="w-4 h-4 text-[#C25E38]" />
                 </button>
               )}
-            </div>
+            </motion.div>
 
             {/* Trust Badges */}
-            <div className="pt-4 sm:pt-6 grid grid-cols-3 gap-2 sm:gap-3 border-t border-[#E8E1D5] max-w-lg mx-auto lg:mx-0">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' }}
+              className="pt-4 sm:pt-6 grid grid-cols-3 gap-2 sm:gap-3 border-t border-[#E8E1D5] max-w-lg mx-auto lg:mx-0"
+            >
               <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-1.5 sm:gap-2.5">
                 <div className="p-2 rounded-xl bg-[#F4ECE0] text-[#0F766E] border border-[#E8E1D5]">
                   <Truck className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -111,13 +137,21 @@ export const HeroSection: React.FC = () => {
                   <p className="text-[10px] sm:text-[11px] text-[#78716C]">Oficial Aura</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Right Column: Hero Spotlight Card with Compositor CSS Floating */}
           <div className="lg:col-span-5 relative mt-4 lg:mt-0">
             {heroProduct && (
-              <div className="relative mx-auto max-w-sm sm:max-w-md group gpu-layer">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.94, y: 25 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
+                className="relative mx-auto max-w-sm sm:max-w-md group gpu-layer"
+              >
+                {/* Subtle soft glow */}
+                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-[#EADBC8] via-[#DEC9AE] to-[#C25E38]/20 opacity-40 group-hover:opacity-70 blur-md transition duration-500 pointer-events-none" />
+
                 <div className="relative rounded-3xl p-5 sm:p-7 overflow-hidden border border-[#E8E1D5] bg-[#FFFFFF] shadow-lg transition-all duration-300 hover:shadow-xl">
                   
                   {/* Top Product Badges */}
@@ -133,9 +167,11 @@ export const HeroSection: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Main Product Image with lightweight CSS compositor animation */}
+                  {/* Main Product Image with subtle float */}
                   <div className="relative aspect-square rounded-2xl overflow-hidden mb-4 sm:mb-6 bg-[#FAF7F2] p-3 flex items-center justify-center border border-[#E8E1D5]/60">
-                    <img
+                    <motion.img
+                      animate={{ y: [0, -6, 0] }}
+                      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                       src={heroProduct.images[0]}
                       alt={heroProduct.title}
                       decoding="async"
@@ -186,7 +222,7 @@ export const HeroSection: React.FC = () => {
                   </div>
 
                 </div>
-              </div>
+              </motion.div>
             )}
           </div>
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   Heart,
   Eye,
@@ -12,9 +13,10 @@ import { useStore } from '../context/StoreContext';
 
 interface ProductCardProps {
   product: Product;
+  index?: number;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0 }) => {
   const {
     formatPrice,
     addToCart,
@@ -37,7 +39,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const displayImage = selectedVariant?.image || product.images[currentImageIndex] || product.images[0];
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 22 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.45,
+        delay: Math.min(index * 0.05, 0.4),
+        ease: 'easeOut'
+      }}
       className="group relative flex flex-col rounded-3xl bg-[#FFFFFF] border border-[#E8E1D5] hover:border-[#BA9971] shadow-xs hover:shadow-lg transition-all duration-200 ease-out hover:-translate-y-1 overflow-hidden gpu-layer"
     >
       {/* Top Image Container */}
@@ -189,6 +198,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
