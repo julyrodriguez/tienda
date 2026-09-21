@@ -1,0 +1,479 @@
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import { Product, ProductVariant, CartItem, Coupon, Order, CategoryFilter } from '../types/store';
+import { INITIAL_PRODUCTS, AVAILABLE_COUPONS } from '../data/mockData';
+
+interface ToastMessage {
+  id: string;
+  type: 'success' | 'info' | 'error';
+  title: string;
+  description?: string;
+}
+
+interface StoreContextType {
+  // Products & Filtering
+  products: Product[];
+  selectedCategory: CategoryFilter;
+  setSelectedCategory: (cat: CategoryFilter) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  sortBy: 'featured' | 'price-asc' | 'price-desc' | 'rating' | 'discount';
+  setSortBy: (sort: 'featured' | 'price-asc' | 'price-desc' | 'rating' | 'discount') => void;
+  inStockOnly: boolean;
+  setInStockOnly: (val: boolean) => void;
+  filteredProducts: Product[];
+
+  // Wishlist
+  wishlist: string[];
+  toggleWishlist: (productId: string) => void;
+  isWishlisted: (productId: string) => boolean;
+
+  // Cart
+  cart: CartItem[];
+  addToCart: (product: Product, variant?: ProductVariant, quantity?: number) => void;
+  removeFromCart: (cartItemId: string) => void;
+  updateQuantity: (cartItemId: string, newQty: number) => void;
+  clearCart: () => void;
+  cartCount: number;
+  cartSubtotal: number;
+  freeShippingThreshold: number;
+  freeShippingProgress: number; // 0 to 100%
+  amountToFreeShipping: number;
+
+  // Coupon
+  appliedCoupon: Coupon | null;
+  applyCoupon: (code: string) => { success: boolean; message: string };
+  removeCoupon: () => void;
+  discountAmount: number;
+
+  // Modals & Drawers
+  isCartOpen: boolean;
+  setIsCartOpen: (open: boolean) => void;
+  quickViewProduct: Product | null;
+  setQuickViewProduct: (product: Product | null) => void;
+  isCheckoutOpen: boolean;
+  setIsCheckoutOpen: (open: boolean) => void;
+  isAdminOpen: boolean;
+  setIsAdminOpen: (open: boolean) => void;
+  isDocsOpen: boolean;
+  setIsDocsOpen: (open: boolean) => void;
+  isWishlistModalOpen: boolean;
+  setIsWishlistModalOpen: (open: boolean) => void;
+
+  // Currency
+  currency: 'ARS' | 'USD';
+  setCurrency: (c: 'ARS' | 'USD') => void;
+  formatPrice: (amountInArs: number) => string;
+
+  // Admin & Orders
+  orders: Order[];
+  createOrder: (order: Omit<Order, 'id' | 'orderNumber' | 'createdAt'>) => Order;
+  addProduct: (product: Product) => void;
+  updateProductStock: (productId: string, newStock: number) => void;
+
+  // Toasts
+  toasts: ToastMessage[];
+  addToast: (toast: Omit<ToastMessage, 'id'>) => void;
+  removeToast: (id: string) => void;
+}
+
+const StoreContext = createContext<StoreContextType | undefined>(undefined);
+
+const FREE_SHIPPING_THRESHOLD_ARS = 250000;
+const USD_RATE = 1250; // 1 USD = 1250 ARS
+
+export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Catalog State
+  const [products, setProducts] = useState<Product[]>(() => {
+    const saved = localStorage.getItem('aura_products');
+    return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+  });
+
+  const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc' | 'rating' | 'discount'>('featured');
+  const [inStockOnly, setInStockOnly] = useState(false);
+
+  // Wishlist State
+  const [wishlist, setWishlist] = useState<string[]>(() => {
+    const saved = localStorage.getItem('aura_wishlist');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // Cart State
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    const saved = localStorage.getItem('aura_cart');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // Coupon State
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(() => {
+    const saved = localStorage.getItem('aura_coupon');
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  // Orders State
+  const [orders, setOrders] = useState<Order[]>(() => {
+    const saved = localStorage.getItem('aura_orders');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // Modals & Navigation
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isDocsOpen, setIsDocsOpen] = useState(false);
+  const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
+  const [currency, setCurrency] = useState<'ARS' | 'USD'>('ARS');
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+
+  // Sync with localStorage
+  useEffect(() => {
+    localStorage.setItem('aura_products', JSON.stringify(products));
+  }, [products]);
+
+  useEffect(() => {
+    localStorage.setItem('aura_cart', JSON.stringify(cart));
+  }, [cart]);
+
+  useEffect(() => {
+    localStorage.setItem('aura_wishlist', JSON.stringify(wishlist));
+  }, [wishlist]);
+
+  useEffect(() => {
+    localStorage.setItem('aura_orders', JSON.stringify(orders));
+  }, [orders]);
+
+  useEffect(() => {
+    if (appliedCoupon) {
+      localStorage.setItem('aura_coupon', JSON.stringify(appliedCoupon));
+    } else {
+      localStorage.removeItem('aura_coupon');
+    }
+  }, [appliedCoupon]);
+
+  // Toast System
+  const addToast = (toast: Omit<ToastMessage, 'id'>) => {
+    const id = Math.random().toString(36).substring(2, 9);
+    setToasts(prev => [...prev, { ...toast, id }]);
+    setTimeout(() => {
+      removeToast(id);
+    }, 4500);
+  };
+
+  const removeToast = (id: string) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  };
+
+  // Currency Formatter
+  const formatPrice = (amountInArs: number): string => {
+    if (currency === 'USD') {
+      const usdVal = amountInArs / USD_RATE;
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      }).format(usdVal);
+    }
+    return new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency: 'ARS',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amountInArs);
+  };
+
+  // Wishlist Methods
+  const toggleWishlist = (productId: string) => {
+    setWishlist(prev => {
+      const exists = prev.includes(productId);
+      const prod = products.find(p => p.id === productId);
+      if (exists) {
+        addToast({
+          type: 'info',
+          title: 'Eliminado de favoritos',
+          description: prod ? prod.title : undefined,
+        });
+        return prev.filter(id => id !== productId);
+      } else {
+        addToast({
+          type: 'success',
+          title: 'Guardado en favoritos ❤️',
+          description: prod ? prod.title : undefined,
+        });
+        return [...prev, productId];
+      }
+    });
+  };
+
+  const isWishlisted = (productId: string) => wishlist.includes(productId);
+
+  // Cart Calculations
+  const cartSubtotal = useMemo(() => {
+    return cart.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
+  }, [cart]);
+
+  const cartCount = useMemo(() => {
+    return cart.reduce((acc, item) => acc + item.quantity, 0);
+  }, [cart]);
+
+  const discountAmount = useMemo(() => {
+    if (!appliedCoupon) return 0;
+    if (appliedCoupon.minSpend && cartSubtotal < appliedCoupon.minSpend) return 0;
+
+    if (appliedCoupon.discountType === 'percentage') {
+      return Math.round((cartSubtotal * appliedCoupon.discountValue) / 100);
+    }
+    return Math.min(appliedCoupon.discountValue, cartSubtotal);
+  }, [appliedCoupon, cartSubtotal]);
+
+  const amountToFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD_ARS - cartSubtotal);
+  const freeShippingProgress = Math.min(100, Math.round((cartSubtotal / FREE_SHIPPING_THRESHOLD_ARS) * 100));
+
+  // Cart Methods
+  const addToCart = (product: Product, variant?: ProductVariant, quantity: number = 1) => {
+    const unitPrice = variant?.promoPrice ?? variant?.price ?? product.promoPrice ?? product.price;
+    const cartItemId = variant ? `${product.id}-${variant.id}` : product.id;
+
+    setCart(prev => {
+      const existing = prev.find(item => item.id === cartItemId);
+      if (existing) {
+        return prev.map(item =>
+          item.id === cartItemId
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+      }
+      return [...prev, {
+        id: cartItemId,
+        productId: product.id,
+        product,
+        variant,
+        quantity,
+        unitPrice,
+      }];
+    });
+
+    addToast({
+      type: 'success',
+      title: '¡Agregado al carrito!',
+      description: `${product.title}${variant ? ` (${variant.name})` : ''} x${quantity}`,
+    });
+
+    setIsCartOpen(true);
+  };
+
+  const removeFromCart = (cartItemId: string) => {
+    setCart(prev => prev.filter(item => item.id !== cartItemId));
+  };
+
+  const updateQuantity = (cartItemId: string, newQty: number) => {
+    if (newQty <= 0) {
+      removeFromCart(cartItemId);
+      return;
+    }
+    setCart(prev =>
+      prev.map(item => (item.id === cartItemId ? { ...item, quantity: newQty } : item))
+    );
+  };
+
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  // Coupons
+  const applyCoupon = (code: string) => {
+    const formatted = code.trim().toUpperCase();
+    const found = AVAILABLE_COUPONS.find(c => c.code === formatted);
+
+    if (!found) {
+      return { success: false, message: 'El cupón ingresado no es válido o ha expirado.' };
+    }
+
+    if (found.minSpend && cartSubtotal < found.minSpend) {
+      return {
+        success: false,
+        message: `Mínimo de compra para este cupón: ${formatPrice(found.minSpend)}`,
+      };
+    }
+
+    setAppliedCoupon(found);
+    return { success: true, message: `¡Cupón ${found.code} aplicado con éxito!` };
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+  };
+
+  // Filtered Products
+  const filteredProducts = useMemo(() => {
+    let result = [...products];
+
+    // Category
+    if (selectedCategory !== 'all') {
+      result = result.filter(p => p.category === selectedCategory);
+    }
+
+    // Search
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      result = result.filter(p =>
+        p.title.toLowerCase().includes(q) ||
+        p.subtitle.toLowerCase().includes(q) ||
+        p.tags.some(t => t.toLowerCase().includes(q)) ||
+        p.category.toLowerCase().includes(q)
+      );
+    }
+
+    // In stock
+    if (inStockOnly) {
+      result = result.filter(p => p.stock > 0);
+    }
+
+    // Sort
+    switch (sortBy) {
+      case 'price-asc':
+        result.sort((a, b) => (a.promoPrice ?? a.price) - (b.promoPrice ?? b.price));
+        break;
+      case 'price-desc':
+        result.sort((a, b) => (b.promoPrice ?? b.price) - (a.promoPrice ?? a.price));
+        break;
+      case 'rating':
+        result.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'discount':
+        result.sort((a, b) => {
+          const discA = a.promoPrice ? (a.price - a.promoPrice) / a.price : 0;
+          const discB = b.promoPrice ? (b.price - b.promoPrice) / b.price : 0;
+          return discB - discA;
+        });
+        break;
+      case 'featured':
+      default:
+        result.sort((a, b) => (b.isBestSeller ? 1 : 0) - (a.isBestSeller ? 1 : 0));
+        break;
+    }
+
+    return result;
+  }, [products, selectedCategory, searchQuery, inStockOnly, sortBy]);
+
+  // Order Creation
+  const createOrder = (orderData: Omit<Order, 'id' | 'orderNumber' | 'createdAt'>): Order => {
+    const newOrder: Order = {
+      ...orderData,
+      id: `ord-${Date.now()}`,
+      orderNumber: `AUR-${Math.floor(100000 + Math.random() * 900000)}`,
+      createdAt: new Date().toISOString(),
+      trackingNumber: `TRACK-AR-${Math.floor(10000000 + Math.random() * 90000000)}`,
+    };
+
+    setOrders(prev => [newOrder, ...prev]);
+
+    // Deduct stock
+    setProducts(prevProds =>
+      prevProds.map(prod => {
+        const matchingCartItem = orderData.items.find(i => i.productId === prod.id);
+        if (matchingCartItem) {
+          return {
+            ...prod,
+            stock: Math.max(0, prod.stock - matchingCartItem.quantity),
+          };
+        }
+        return prod;
+      })
+    );
+
+    clearCart();
+    setAppliedCoupon(null);
+    return newOrder;
+  };
+
+  const addProduct = (newProduct: Product) => {
+    setProducts(prev => [newProduct, ...prev]);
+    addToast({
+      type: 'success',
+      title: 'Producto creado en el catálogo',
+      description: newProduct.title,
+    });
+  };
+
+  const updateProductStock = (productId: string, newStock: number) => {
+    setProducts(prev =>
+      prev.map(p => (p.id === productId ? { ...p, stock: newStock } : p))
+    );
+  };
+
+  return (
+    <StoreContext.Provider
+      value={{
+        products,
+        selectedCategory,
+        setSelectedCategory,
+        searchQuery,
+        setSearchQuery,
+        sortBy,
+        setSortBy,
+        inStockOnly,
+        setInStockOnly,
+        filteredProducts,
+
+        wishlist,
+        toggleWishlist,
+        isWishlisted,
+
+        cart,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        cartCount,
+        cartSubtotal,
+        freeShippingThreshold: FREE_SHIPPING_THRESHOLD_ARS,
+        freeShippingProgress,
+        amountToFreeShipping,
+
+        appliedCoupon,
+        applyCoupon,
+        removeCoupon,
+        discountAmount,
+
+        isCartOpen,
+        setIsCartOpen,
+        quickViewProduct,
+        setQuickViewProduct,
+        isCheckoutOpen,
+        setIsCheckoutOpen,
+        isAdminOpen,
+        setIsAdminOpen,
+        isDocsOpen,
+        setIsDocsOpen,
+        isWishlistModalOpen,
+        setIsWishlistModalOpen,
+
+        currency,
+        setCurrency,
+        formatPrice,
+
+        orders,
+        createOrder,
+        addProduct,
+        updateProductStock,
+
+        toasts,
+        addToast,
+        removeToast,
+      }}
+    >
+      {children}
+    </StoreContext.Provider>
+  );
+};
+
+export const useStore = () => {
+  const context = useContext(StoreContext);
+  if (!context) {
+    throw new Error('useStore must be used within a StoreProvider');
+  }
+  return context;
+};
