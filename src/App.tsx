@@ -11,7 +11,6 @@ import { CheckoutModal } from './components/CheckoutModal';
 import { AdminPanelModal } from './components/AdminPanelModal';
 import { WishlistModal } from './components/WishlistModal';
 import { LegalSupportModal } from './components/LegalSupportModal';
-import { LiveSalesToaster } from './components/LiveSalesToaster';
 import { ToastContainer } from './components/ToastContainer';
 import { Footer } from './components/Footer';
 
@@ -53,8 +52,7 @@ export const AppContent: React.FC = () => {
       <WishlistModal />
       <LegalSupportModal />
 
-      {/* Reactive Floating Alerts & Social Proof */}
-      <LiveSalesToaster />
+      {/* Action Feedback Toasts */}
       <ToastContainer />
     </div>
   );
