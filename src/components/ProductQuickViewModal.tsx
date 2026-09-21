@@ -128,14 +128,33 @@ export const ProductQuickViewModal: React.FC = () => {
           transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.22 }}
           className="relative z-10 w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#FFFFFF] border border-[#E8E1D5] shadow-2xl p-4 sm:p-6 md:p-8 text-[#1C1917] gpu-layer"
         >
-          {/* Close Button */}
-          <button
-            onClick={() => setQuickViewProduct(null)}
-            className="absolute top-4 right-4 p-2 rounded-full bg-[#FAF7F2] hover:bg-[#F4ECE0] text-[#78716C] hover:text-[#1C1917] transition-colors cursor-pointer z-20 border border-[#E8E1D5]"
-            aria-label="Cerrar"
-          >
-            <X className="w-4 h-4 sm:w-5 sm:h-5" />
-          </button>
+          {/* Top Actions: Wishlist, Share, Close */}
+          <div className="absolute top-3.5 sm:top-5 right-3.5 sm:right-5 z-20 flex items-center gap-1.5 sm:gap-2">
+            <button
+              onClick={() => toggleWishlist(quickViewProduct.id)}
+              className="p-2 sm:p-2.5 rounded-full bg-[#FAF7F2] hover:bg-rose-50 text-[#78716C] hover:text-rose-600 transition-colors border border-[#E8E1D5] cursor-pointer shadow-xs"
+              title={isFavorite ? 'Quitar de favoritos' : 'Guardar en favoritos'}
+              aria-label="Favorito"
+            >
+              <Heart className={`w-4 h-4 sm:w-4.5 sm:h-4.5 ${isFavorite ? 'text-rose-500 fill-rose-500' : ''}`} />
+            </button>
+            <button
+              onClick={handleShare}
+              className="p-2 sm:p-2.5 rounded-full bg-[#FAF7F2] hover:bg-[#F4ECE0] text-[#78716C] hover:text-[#1C1917] transition-colors border border-[#E8E1D5] cursor-pointer shadow-xs"
+              title="Compartir producto"
+              aria-label="Compartir"
+            >
+              <Share2 className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+            </button>
+            <button
+              onClick={() => setQuickViewProduct(null)}
+              className="p-2 sm:p-2.5 rounded-full bg-[#FAF7F2] hover:bg-[#F4ECE0] text-[#78716C] hover:text-[#1C1917] transition-colors cursor-pointer border border-[#E8E1D5] shadow-xs"
+              aria-label="Cerrar modal"
+              title="Cerrar"
+            >
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {/* Left: Gallery */}
@@ -192,32 +211,13 @@ export const ProductQuickViewModal: React.FC = () => {
             {/* Right: Info, Variants, Shipping, CTA */}
             <div className="flex flex-col justify-between space-y-4 sm:space-y-6">
               <div className="space-y-3 sm:space-y-4">
-                {/* Rating & Actions */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center text-[#78350F] text-xs font-bold bg-[#FAF7F2] border border-[#E8E1D5] px-2.5 py-1 rounded-full">
-                      <Star className="w-3.5 h-3.5 fill-[#D97706] text-[#D97706] mr-1" />
-                      <span>{quickViewProduct.rating}</span>
-                    </div>
-                    <span className="text-[11px] sm:text-xs text-[#78716C]">({quickViewProduct.reviewCount} opiniones)</span>
+                {/* Rating & Reviews */}
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center text-[#78350F] text-xs font-bold bg-[#FAF7F2] border border-[#E8E1D5] px-2.5 py-1 rounded-full">
+                    <Star className="w-3.5 h-3.5 fill-[#D97706] text-[#D97706] mr-1" />
+                    <span>{quickViewProduct.rating}</span>
                   </div>
-
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      onClick={() => toggleWishlist(quickViewProduct.id)}
-                      className="p-2 rounded-xl bg-[#FAF7F2] hover:bg-rose-50 text-[#78716C] hover:text-rose-600 transition-colors border border-[#E8E1D5]"
-                      title="Favorito"
-                    >
-                      <Heart className={`w-4 h-4 ${isFavorite ? 'text-rose-500 fill-rose-500' : ''}`} />
-                    </button>
-                    <button
-                      onClick={handleShare}
-                      className="p-2 rounded-xl bg-[#FAF7F2] hover:bg-[#F4ECE0] text-[#78716C] hover:text-[#1C1917] transition-colors border border-[#E8E1D5]"
-                      title="Compartir"
-                    >
-                      <Share2 className="w-4 h-4" />
-                    </button>
-                  </div>
+                  <span className="text-[11px] sm:text-xs text-[#78716C]">({quickViewProduct.reviewCount} opiniones)</span>
                 </div>
 
                 {/* Title & Subtitle */}

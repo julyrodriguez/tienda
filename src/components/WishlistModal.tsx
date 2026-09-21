@@ -11,7 +11,8 @@ export const WishlistModal: React.FC = () => {
     products,
     toggleWishlist,
     addToCart,
-    formatPrice
+    formatPrice,
+    setQuickViewProduct
   } = useStore();
 
   if (!isWishlistModalOpen) return null;
@@ -68,14 +69,21 @@ export const WishlistModal: React.FC = () => {
                   key={p.id}
                   className="flex items-center justify-between p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E1D5] hover:border-[#BA9971] transition-all"
                 >
-                  <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                  <div
+                    onClick={() => {
+                      setQuickViewProduct(p);
+                      setIsWishlistModalOpen(false);
+                    }}
+                    className="flex items-center gap-2.5 sm:gap-3 min-w-0 cursor-pointer flex-1 group/item"
+                    title="Ver detalle del producto"
+                  >
                     <img
                       src={p.images[0]}
                       alt={p.title}
-                      className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl object-cover bg-[#FFFFFF] border border-[#E8E1D5] shrink-0"
+                      className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl object-cover bg-[#FFFFFF] border border-[#E8E1D5] group-hover/item:scale-105 transition-transform shrink-0"
                     />
                     <div className="min-w-0">
-                      <h4 className="font-bold text-[#1C1917] text-xs sm:text-sm truncate max-w-[140px] sm:max-w-[240px]">{p.title}</h4>
+                      <h4 className="font-bold text-[#1C1917] text-xs sm:text-sm truncate max-w-[140px] sm:max-w-[240px] group-hover/item:text-[#C25E38] transition-colors">{p.title}</h4>
                       <p className="text-xs text-[#C25E38] font-bold">
                         {formatPrice(p.promoPrice || p.price)}
                       </p>
