@@ -48,8 +48,8 @@ export const Navbar: React.FC = () => {
   }, [isSearchActive]);
 
   return (
-    <header className="sticky top-0 z-40 w-full transition-all">
-      <div className="bg-[#FAF7F2]/95 backdrop-blur-xl border-b border-[#E8E1D5] shadow-xs">
+    <header className="sticky top-0 z-40 w-full">
+      <div className="bg-[#FAF7F2] border-b border-[#E8E1D5] shadow-xs">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
           
           {/* Brand Logo */}
@@ -261,25 +261,28 @@ export const Navbar: React.FC = () => {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="md:hidden px-3 pb-3 border-t border-[#E8E1D5] overflow-hidden bg-[#FAF7F2]"
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+              className="md:hidden overflow-hidden border-t border-[#E8E1D5] bg-[#FAF7F2]"
             >
-              <div className="relative mt-2">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Buscar en el catálogo..."
-                  className="w-full bg-[#FFFFFF] border border-[#E8E1D5] rounded-xl py-2 pl-8 pr-8 text-xs text-[#1C1917] placeholder-[#A8A29E] focus:outline-none focus:border-[#BA9971]"
-                />
-                <Search className="w-3.5 h-3.5 text-[#A8A29E] absolute left-2.5 top-1/2 -translate-y-1/2" />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="p-1 text-[#A8A29E] absolute right-2 top-1/2 -translate-y-1/2"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                )}
+              <div className="px-3 py-2.5">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Buscar en el catálogo..."
+                    className="w-full bg-[#FFFFFF] border border-[#E8E1D5] rounded-xl py-2 pl-8 pr-8 text-xs text-[#1C1917] placeholder-[#A8A29E] focus:outline-none focus:border-[#BA9971]"
+                  />
+                  <Search className="w-3.5 h-3.5 text-[#A8A29E] absolute left-2.5 top-1/2 -translate-y-1/2" />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="p-1 text-[#A8A29E] absolute right-2 top-1/2 -translate-y-1/2"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
               </div>
             </motion.div>
           )}
@@ -292,56 +295,59 @@ export const Navbar: React.FC = () => {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="lg:hidden px-4 py-4 border-t border-[#E8E1D5] bg-[#FAF7F2] space-y-3"
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:hidden overflow-hidden border-t border-[#E8E1D5] bg-[#FAF7F2]"
             >
-              <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
-                {['all', 'audio', 'wearables', 'gaming', 'workstation', 'lifestyle'].map((cat) => (
+              <div className="px-4 py-4 space-y-3.5">
+                <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
+                  {['all', 'audio', 'wearables', 'gaming', 'workstation', 'lifestyle'].map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => {
+                        setSelectedCategory(cat as any);
+                        setMobileMenuOpen(false);
+                      }}
+                      className={`p-2.5 rounded-xl text-left capitalize transition-colors ${
+                        selectedCategory === cat
+                          ? 'bg-[#EADBC8] text-[#1C1917] font-bold border border-[#DEC9AE]'
+                          : 'bg-[#FFFFFF] text-[#57534E] border border-[#E8E1D5]'
+                      }`}
+                    >
+                      {cat === 'all' ? 'Ver Todo' : cat}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="pt-2 border-t border-[#E8E1D5] flex items-center justify-between">
+                  <span className="text-xs text-[#78716C] font-medium">Moneda:</span>
+                  <div className="flex gap-1.5">
+                    <button
+                      onClick={() => setCurrency('ARS')}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-bold ${currency === 'ARS' ? 'bg-[#1C1917] text-white' : 'bg-[#FFFFFF] text-[#57534E] border border-[#E8E1D5]'}`}
+                    >
+                      ARS ($)
+                    </button>
+                    <button
+                      onClick={() => setCurrency('USD')}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-bold ${currency === 'USD' ? 'bg-[#1C1917] text-white' : 'bg-[#FFFFFF] text-[#57534E] border border-[#E8E1D5]'}`}
+                    >
+                      USD ($)
+                    </button>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex flex-col gap-2">
                   <button
-                    key={cat}
                     onClick={() => {
-                      setSelectedCategory(cat as any);
+                      setIsDocsOpen(true);
                       setMobileMenuOpen(false);
                     }}
-                    className={`p-2.5 rounded-xl text-left capitalize transition-colors ${
-                      selectedCategory === cat
-                        ? 'bg-[#EADBC8] text-[#1C1917] font-bold border border-[#DEC9AE]'
-                        : 'bg-[#FFFFFF] text-[#57534E] border border-[#E8E1D5]'
-                    }`}
+                    className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-[#FFFFFF] border border-[#E8E1D5] text-[#1C1917] text-xs font-bold shadow-xs"
                   >
-                    {cat === 'all' ? 'Ver Todo' : cat}
-                  </button>
-                ))}
-              </div>
-
-              <div className="pt-2 border-t border-[#E8E1D5] flex items-center justify-between">
-                <span className="text-xs text-[#78716C] font-medium">Moneda:</span>
-                <div className="flex gap-1.5">
-                  <button
-                    onClick={() => setCurrency('ARS')}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold ${currency === 'ARS' ? 'bg-[#1C1917] text-white' : 'bg-[#FFFFFF] text-[#57534E] border border-[#E8E1D5]'}`}
-                  >
-                    ARS ($)
-                  </button>
-                  <button
-                    onClick={() => setCurrency('USD')}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold ${currency === 'USD' ? 'bg-[#1C1917] text-white' : 'bg-[#FFFFFF] text-[#57534E] border border-[#E8E1D5]'}`}
-                  >
-                    USD ($)
+                    <BookOpen className="w-4 h-4 text-[#C25E38]" />
+                    <span>Documentación Tiendanube & Headless</span>
                   </button>
                 </div>
-              </div>
-
-              <div className="pt-2 flex flex-col gap-2">
-                <button
-                  onClick={() => {
-                    setIsDocsOpen(true);
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-[#FFFFFF] border border-[#E8E1D5] text-[#1C1917] text-xs font-bold shadow-xs"
-                >
-                  <BookOpen className="w-4 h-4 text-[#C25E38]" />
-                  <span>Documentación Tiendanube & Headless</span>
-                </button>
               </div>
             </motion.div>
           )}
