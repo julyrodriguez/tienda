@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export const Navbar: React.FC = () => {
   const {
+    settings,
     currentView,
     setCurrentView,
     cartCount,
@@ -63,20 +64,22 @@ export const Navbar: React.FC = () => {
               className="flex items-center gap-2.5 sm:gap-3 group text-left cursor-pointer"
             >
               <div className="relative flex items-center justify-center w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-[#292524] via-[#44403C] to-[#C25E38] shadow-md shadow-stone-900/10 group-hover:scale-105 transition-all duration-300">
-                <span className="font-display font-black text-[#FAF7F2] text-xl sm:text-2xl tracking-tighter">A</span>
+                <span className="font-display font-black text-[#FAF7F2] text-xl sm:text-2xl tracking-tighter">
+                  {settings.storeName.charAt(0)}
+                </span>
                 <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#0F766E] border-2 border-[#FAF7F2]" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
                   <span className="font-display font-extrabold text-xl sm:text-2xl tracking-tight text-[#1C1917] group-hover:text-[#C25E38] transition-colors">
-                    AURA<span className="text-[#C25E38]">.</span>
+                    {settings.storeName}<span className="text-[#C25E38]">.</span>
                   </span>
                   <span className="text-[9px] sm:text-[10px] font-bold tracking-widest px-2 py-0.5 rounded-full bg-[#EADBC8] text-[#78350F] uppercase">
                     STUDIO
                   </span>
                 </div>
-                <p className="text-[10px] sm:text-[11px] text-[#78716C] tracking-wide font-medium hidden sm:block">
-                  Tienda Minimalista & Tech
+                <p className="text-[10px] sm:text-[11px] font-medium text-[#78716C] -mt-0.5 hidden sm:block truncate max-w-[200px]">
+                  {settings.storeTagline}
                 </p>
               </div>
             </button>
@@ -173,11 +176,18 @@ export const Navbar: React.FC = () => {
 
             {/* Admin Button */}
             <button
-              onClick={() => setIsAdminOpen(true)}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold text-[#78350F] bg-[#F4ECE0] hover:bg-[#EADBC8] border border-[#DEC9AE] transition-all cursor-pointer shadow-xs"
+              onClick={() => {
+                setCurrentView('admin');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer shadow-xs ${
+                currentView === 'admin'
+                  ? 'bg-[#1C1917] text-[#FAF7F2]'
+                  : 'text-[#78350F] bg-[#F4ECE0] hover:bg-[#EADBC8] border border-[#DEC9AE]'
+              }`}
               title="Panel de Administrador"
             >
-              <SlidersHorizontal className="w-3.5 h-3.5 text-[#C25E38]" />
+              <SlidersHorizontal className={`w-3.5 h-3.5 ${currentView === 'admin' ? 'text-[#DEC9AE]' : 'text-[#C25E38]'}`} />
               <span className="hidden sm:inline">Admin</span>
             </button>
 
@@ -307,6 +317,25 @@ export const Navbar: React.FC = () => {
                   >
                     <span>Explorar Catálogo Completo</span>
                     <span className="px-2 py-0.5 rounded-full bg-[#EADBC8] text-[#78350F] text-[10px] font-bold">Filtros</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setCurrentView('admin');
+                      setMobileMenuOpen(false);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-bold transition-all ${
+                      currentView === 'admin'
+                        ? 'bg-[#1C1917] text-[#FAF7F2] shadow-sm'
+                        : 'bg-[#F4ECE0] text-[#78350F] border border-[#DEC9AE]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <SlidersHorizontal className="w-3.5 h-3.5 text-[#C25E38]" />
+                      <span>Panel de Administración</span>
+                    </div>
+                    <span className="px-2 py-0.5 rounded-full bg-[#EADBC8] text-[#78350F] text-[10px] font-bold">Admin</span>
                   </button>
                 </div>
 

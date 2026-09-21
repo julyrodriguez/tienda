@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { Product, ProductVariant, CartItem, Coupon, Order, CategoryFilter } from '../types/store';
+import { Product, ProductVariant, CartItem, Coupon, Order, CategoryFilter, StoreSettings, ViewType } from '../types/store';
 import { INITIAL_PRODUCTS, AVAILABLE_COUPONS } from '../data/mockData';
 import { TIENDA_API } from '../config/api';
 
@@ -11,6 +11,11 @@ interface ToastMessage {
 }
 
 interface StoreContextType {
+  // Store Settings & Customization
+  settings: StoreSettings;
+  updateSettings: (newSettings: Partial<StoreSettings>) => Promise<void>;
+  resetSettings: () => Promise<void>;
+
   // Products & Filtering
   products: Product[];
   selectedCategory: CategoryFilter;
@@ -47,8 +52,8 @@ interface StoreContextType {
   discountAmount: number;
 
   // Views & Routing
-  currentView: 'home' | 'catalog';
-  setCurrentView: (view: 'home' | 'catalog') => void;
+  currentView: ViewType;
+  setCurrentView: (view: ViewType) => void;
 
   // Modals & Drawers
   isCartOpen: boolean;
@@ -73,10 +78,11 @@ interface StoreContextType {
   setCurrency: (c: 'ARS' | 'USD') => void;
   formatPrice: (amountInArs: number) => string;
 
-  // Admin & Orders
+  // Admin & Products CRUD & Orders
   orders: Order[];
   createOrder: (order: Omit<Order, 'id' | 'orderNumber' | 'createdAt'>) => Promise<Order>;
   addProduct: (product: Product) => Promise<void> | void;
+  updateProduct: (updatedProduct: Product) => Promise<void>;
   updateProductStock: (productId: string, newStock: number) => Promise<void> | void;
   deleteProduct: (productId: string) => Promise<void>;
 
@@ -88,10 +94,39 @@ interface StoreContextType {
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
+export const DEFAULT_STORE_SETTINGS: StoreSettings = {
+  storeName: 'AURA',
+  storeTagline: 'Tienda de electrónica de vanguardia 100% personalizada',
+  supportEmail: 'alertasjariel@gmail.com',
+  supportPhone: '+54 11 4567-8900',
+  announcementText: '20% OFF Inauguración con cupón MODERNA20 • Envíos gratis desde $250.000 • Hasta 12 cuotas sin interés',
+  heroBadge: 'Colección Minimalista 2026',
+  heroTitle: 'Tecnología de élite,',
+  heroTitleHighlight: 'en su expresión más pura.',
+  heroSubtitle: 'Tu tienda de electrónica de vanguardia 100% personalizada. Dispositivos de audio Hi-Fi, wearables y periféricos premium configurados a tu medida, con atención exclusiva, garantía oficial y envíos prioritarios a todo el país.',
+  heroCtaPrimary: 'Explorar Catálogo',
+  heroCtaSecondary: 'Ver Producto Estrella',
+  heroStarProductId: 'prod-1',
+  heroStarBadge: 'DROP EXCLUSIVO',
+  heroStarTag: '🎧 Berilio Puro 40mm • LDAC Lossless',
+  freeShippingThreshold: 250000,
+};
+
 const FREE_SHIPPING_THRESHOLD_ARS = 250000;
 const USD_RATE = 1250; // 1 USD = 1250 ARS
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Store Customization Settings State
+  const [settings, setSettings] = useState<StoreSettings>(() => {
+    const saved = localStorage.getItem('aura_store_settings');
+    if (saved) {
+      try {
+        return { ...DEFAULT_STORE_SETTINGS, ...JSON.parse(saved) };
+      } catch (e) {}
+    }
+    return DEFAULT_STORE_SETTINGS;
+  });
+
   // Catalog State
   const [products, setProducts] = useState<Product[]>(() => {
     const saved = localStorage.getItem('aura_products');
@@ -128,7 +163,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   });
 
   // Views & Routing
-  const [currentView, setCurrentView] = useState<'home' | 'catalog'>('home');
+  const [currentView, setCurrentView] = useState<ViewType>('home');
 
   // Modals & Navigation
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -398,6 +433,18 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       } catch (err) {
         console.warn('⚠️ No se pudo conectar con backend MongoDB para órdenes:', err);
       }
+
+      try {
+        const setRes = await fetch(TIENDA_API.settings);
+        if (setRes.ok) {
+          const setData = await setRes.json();
+          if (setData.success && setData.settings) {
+            setSettings(prev => ({ ...prev, ...setData.settings }));
+          }
+        }
+      } catch (err) {
+        console.warn('⚠️ No se pudo conectar con backend MongoDB para settings:', err);
+      }
     };
 
     loadDataFromServer();
@@ -518,9 +565,73 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
+  const updateProduct = async (updatedProduct: Product) => {
+    setProducts(prev =>
+      prev.map(p => (p.id === updatedProduct.id ? updatedProduct : p))
+    );
+    addToast({
+      type: 'success',
+      title: 'Producto actualizado',
+      description: updatedProduct.title
+    });
+
+    try {
+      await fetch(TIENDA_API.updateProduct(updatedProduct.id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedProduct)
+      });
+    } catch (err) {
+      console.warn('⚠️ Error al actualizar producto en servidor MongoDB:', err);
+    }
+  };
+
+  const updateSettings = async (newSettings: Partial<StoreSettings>) => {
+    const merged = { ...settings, ...newSettings };
+    setSettings(merged);
+    localStorage.setItem('aura_store_settings', JSON.stringify(merged));
+    addToast({
+      type: 'success',
+      title: 'Configuración guardada',
+      description: 'Los cambios ya se aplicaron a la tienda.'
+    });
+
+    try {
+      await fetch(TIENDA_API.settings, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ settings: merged })
+      });
+    } catch (err) {
+      console.warn('⚠️ Error al guardar configuración en servidor MongoDB:', err);
+    }
+  };
+
+  const resetSettings = async () => {
+    setSettings(DEFAULT_STORE_SETTINGS);
+    localStorage.setItem('aura_store_settings', JSON.stringify(DEFAULT_STORE_SETTINGS));
+    addToast({
+      type: 'info',
+      title: 'Valores restablecidos',
+      description: 'Se restauraron los textos originales de la tienda.'
+    });
+
+    try {
+      await fetch(TIENDA_API.settings, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ settings: DEFAULT_STORE_SETTINGS })
+      });
+    } catch (err) {}
+  };
+
   return (
     <StoreContext.Provider
       value={{
+        settings,
+        updateSettings,
+        resetSettings,
+
         currentView,
         setCurrentView,
 
@@ -546,7 +657,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         clearCart,
         cartCount,
         cartSubtotal,
-        freeShippingThreshold: FREE_SHIPPING_THRESHOLD_ARS,
+        freeShippingThreshold: settings.freeShippingThreshold || FREE_SHIPPING_THRESHOLD_ARS,
         freeShippingProgress,
         amountToFreeShipping,
 
@@ -578,6 +689,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         orders,
         createOrder,
         addProduct,
+        updateProduct,
         updateProductStock,
         deleteProduct,
 

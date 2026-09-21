@@ -5,10 +5,10 @@ import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { HomeFeaturedProducts } from './components/HomeFeaturedProducts';
 import { CatalogView } from './components/CatalogView';
+import { AdminView } from './components/AdminView';
 import { ProductQuickViewModal } from './components/ProductQuickViewModal';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
-import { AdminPanelModal } from './components/AdminPanelModal';
 import { WishlistModal } from './components/WishlistModal';
 import { LegalSupportModal } from './components/LegalSupportModal';
 import { ToastContainer } from './components/ToastContainer';
@@ -20,7 +20,7 @@ export const AppContent: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] selection:bg-[#EADBC8] selection:text-[#1C1917]">
       {/* Top Announcement Marquee */}
-      <MarqueeBanner />
+      {currentView !== 'admin' && <MarqueeBanner />}
 
       {/* Main Sticky Navbar */}
       <Navbar />
@@ -35,9 +35,12 @@ export const AppContent: React.FC = () => {
             {/* Curated Featured Articles on Home */}
             <HomeFeaturedProducts />
           </>
-        ) : (
+        ) : currentView === 'catalog' ? (
           /* Dedicated Catalog Page with Category Sidebar & Advanced Filters */
           <CatalogView />
+        ) : (
+          /* Dedicated Full Administrative Page */
+          <AdminView />
         )}
       </main>
 
@@ -48,7 +51,6 @@ export const AppContent: React.FC = () => {
       <ProductQuickViewModal />
       <CartDrawer />
       <CheckoutModal />
-      <AdminPanelModal />
       <WishlistModal />
       <LegalSupportModal />
 

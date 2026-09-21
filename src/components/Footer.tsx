@@ -18,6 +18,7 @@ import { TIENDA_API } from '../config/api';
 
 export const Footer: React.FC = () => {
   const {
+    settings,
     addToast,
     setIsLegalModalOpen,
     setLegalTab,
@@ -130,15 +131,15 @@ export const Footer: React.FC = () => {
         <div className="lg:col-span-2 space-y-3 sm:space-y-4">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-[#1C1917] flex items-center justify-center text-[#FAF7F2] font-black text-lg">
-              A
+              {settings.storeName.charAt(0)}
             </div>
             <span className="font-display font-extrabold text-xl sm:text-2xl text-[#1C1917]">
-              AURA<span className="text-[#C25E38]">.</span>
+              {settings.storeName}<span className="text-[#C25E38]">.</span>
             </span>
           </div>
 
           <p className="text-xs text-[#78716C] leading-relaxed max-w-sm">
-            Diseño contemporáneo, acústica de nivel audiófilo y wearables de última generación. Fabricación de precisión con materiales sostenibles.
+            {settings.storeTagline}
           </p>
 
           {/* Newsletter */}
@@ -276,7 +277,7 @@ export const Footer: React.FC = () => {
       {/* Bottom Legal bar (Clean without tech stack mentions) */}
       <div className="border-t border-[#E8E1D5] py-4 sm:py-6 bg-[#EADBC8]/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#78716C] text-center sm:text-left">
-          <p>© 2026 AURA™ STUDIO S.R.L. Todos los derechos reservados. Venta oficial y garantía directa de fábrica.</p>
+          <p>© 2026 {settings.storeName}™ S.R.L. Todos los derechos reservados. Venta oficial y garantía directa de fábrica.</p>
           <div className="flex flex-wrap items-center justify-center gap-3 font-medium">
             <button onClick={() => openLegal('terms')} className="hover:text-[#1C1917] cursor-pointer">
               Términos

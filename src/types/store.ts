@@ -94,3 +94,29 @@ export interface Order {
 }
 
 export type CategoryFilter = 'all' | 'audio' | 'wearables' | 'workstation' | 'lifestyle' | 'gaming';
+
+export type ViewType = 'home' | 'catalog' | 'admin';
+
+export interface StoreSettings {
+  storeName: string;
+  storeTagline: string;
+  supportEmail: string;
+  supportPhone: string;
+  announcementText: string;
+  
+  // Hero Section copy
+  heroBadge: string;
+  heroTitle: string;
+  heroTitleHighlight: string;
+  heroSubtitle: string;
+  heroCtaPrimary: string;
+  heroCtaSecondary: string;
+  
+  // Hero Star Product
+  heroStarProductId: string;
+  heroStarBadge: string;
+  heroStarTag: string;
+
+  // Free shipping threshold
+  freeShippingThreshold: number;
+}

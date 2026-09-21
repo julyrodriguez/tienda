@@ -13,8 +13,8 @@ import {
 import { useStore } from '../context/StoreContext';
 
 export const HeroSection: React.FC = () => {
-  const { products, setQuickViewProduct, addToCart, formatPrice, setCurrentView } = useStore();
-  const heroProduct = products[0]; // Aura Sound ANC Pro
+  const { settings, products, setQuickViewProduct, addToCart, formatPrice, setCurrentView } = useStore();
+  const heroProduct = products.find(p => p.id === settings.heroStarProductId) || products[0];
 
   return (
     <section className="relative overflow-hidden pt-6 pb-12 sm:pt-12 sm:pb-20 border-b border-[#E8E1D5] bg-[#FAF7F2]">
@@ -49,7 +49,7 @@ export const HeroSection: React.FC = () => {
               className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-[#F4ECE0] border border-[#E8E1D5] text-[11px] sm:text-xs font-bold text-[#78350F] shadow-xs"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#C25E38]" />
-              <span>Colección Minimalista 2026 • Sonido & Wearables de Precisión</span>
+              <span>{settings.heroBadge}</span>
             </motion.div>
 
             {/* Main Headline */}
@@ -59,9 +59,9 @@ export const HeroSection: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
               className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.15] text-[#1C1917]"
             >
-              Tecnología de élite,{' '}
+              {settings.heroTitle}{' '}
               <span className="text-gradient-warm">
-                en su expresión más pura.
+                {settings.heroTitleHighlight}
               </span>
             </motion.h1>
 
@@ -72,7 +72,7 @@ export const HeroSection: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
               className="text-[#57534E] text-sm sm:text-base lg:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal"
             >
-              Tu tienda de electrónica de vanguardia 100% personalizada. Dispositivos de audio Hi-Fi, wearables y periféricos premium configurados a tu medida, con atención exclusiva, garantía oficial y envíos prioritarios a todo el país.
+              {settings.heroSubtitle}
             </motion.p>
 
             {/* Action Buttons */}
@@ -89,7 +89,7 @@ export const HeroSection: React.FC = () => {
                 }}
                 className="flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3.5 sm:py-4 rounded-2xl bg-[#1C1917] hover:bg-[#292524] text-[#FAF7F2] font-bold text-xs sm:text-sm shadow-md transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
-                <span>Explorar Catálogo</span>
+                <span>{settings.heroCtaPrimary}</span>
                 <ArrowRight className="w-4 h-4 text-[#DEC9AE]" />
               </button>
 
@@ -98,7 +98,7 @@ export const HeroSection: React.FC = () => {
                   onClick={() => setQuickViewProduct(heroProduct)}
                   className="flex items-center justify-center gap-2 px-5 sm:px-6 py-3.5 sm:py-4 rounded-2xl bg-[#FFFFFF] hover:bg-[#F4ECE0] text-[#1C1917] border border-[#E8E1D5] font-bold text-xs sm:text-sm transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer shadow-xs"
                 >
-                  <span>Ver Producto Estrella</span>
+                  <span>{settings.heroCtaSecondary}</span>
                   <ChevronRight className="w-4 h-4 text-[#C25E38]" />
                 </button>
               )}
@@ -161,7 +161,7 @@ export const HeroSection: React.FC = () => {
                   <div className="flex items-center justify-between mb-3 sm:mb-4">
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#EADBC8]/60 text-[#78350F] text-[10px] sm:text-xs font-black uppercase tracking-wider border border-[#DEC9AE]">
                       <Zap className="w-3 h-3 text-[#C25E38]" />
-                      DROP EXCLUSIVO
+                      {settings.heroStarBadge}
                     </span>
                     <div className="flex items-center gap-1 text-[#78350F] text-xs font-bold bg-[#FAF7F2] px-2.5 py-1 rounded-full border border-[#E8E1D5]">
                       <Star className="w-3 h-3 fill-[#D97706] text-[#D97706]" />
@@ -182,7 +182,7 @@ export const HeroSection: React.FC = () => {
                     />
                     
                     <div className="absolute bottom-3 left-3 bg-[#FFFFFF] border border-[#E8E1D5] px-2.5 py-1 rounded-xl text-[10px] sm:text-[11px] font-semibold text-[#1C1917] shadow-xs">
-                      🎧 Berilio Puro 40mm • LDAC Lossless
+                      {settings.heroStarTag}
                     </div>
                   </div>
 
