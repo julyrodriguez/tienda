@@ -5,13 +5,16 @@
 @layer base {
   body {
     @apply bg-[#FAF7F2] text-[#1C1917] font-sans antialiased selection:bg-[#EADBC8] selection:text-[#1C1917];
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 }
 
-/* Custom warm cream scrollbar */
+/* Fast, lightweight warm cream scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -21,34 +24,31 @@
 ::-webkit-scrollbar-thumb {
   background: #D8D0C5;
   border-radius: 9999px;
-  border: 2px solid #FAF7F2;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #BA9971;
 }
 
-/* Light cream glassmorphism utilities */
+/* High-performance clean surface panels (GPU friendly, zero blur lag) */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(229, 223, 213, 0.8);
+  background: #FFFFFF;
+  border: 1px solid #E8E1D5;
+  box-shadow: 0 4px 20px -2px rgba(28, 25, 23, 0.04);
 }
 
 .glass-dropdown {
-  background: rgba(253, 251, 247, 0.98);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(216, 208, 197, 0.8);
+  background: #FFFFFF;
+  border: 1px solid #E8E1D5;
+  box-shadow: 0 10px 30px -4px rgba(28, 25, 23, 0.08);
 }
 
 .glow-warm {
-  box-shadow: 0 10px 30px -10px rgba(186, 153, 113, 0.25);
+  box-shadow: 0 8px 24px -6px rgba(186, 153, 113, 0.18);
 }
 
 .text-gradient-warm {
-  background: linear-gradient(135deg, #1C1917 0%, #7F6242 60%, #C25E38 100%);
+  background: linear-gradient(135deg, #1C1917 0%, #78350F 50%, #C25E38 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -57,4 +57,12 @@
   background: linear-gradient(135deg, #9A6B3D 0%, #C25E38 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* Force GPU acceleration on key animated layers */
+.gpu-layer {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
 }

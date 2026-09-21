@@ -69,7 +69,7 @@ export const CartDrawer: React.FC = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={() => setIsCartOpen(false)}
-          className="fixed inset-0 bg-[#1C1917]/60 backdrop-blur-sm"
+          className="fixed inset-0 bg-[#1C1917]/50"
         />
 
         {/* Drawer Panel */}
@@ -78,8 +78,8 @@ export const CartDrawer: React.FC = () => {
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-            className="w-screen max-w-md bg-[#FAF7F2] border-l border-[#E8E1D5] shadow-2xl flex flex-col justify-between"
+            transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.28 }}
+            className="w-screen max-w-md bg-[#FAF7F2] border-l border-[#E8E1D5] shadow-2xl flex flex-col justify-between gpu-layer"
           >
             {/* Drawer Header */}
             <div className="p-4 sm:p-6 border-b border-[#E8E1D5] bg-[#FFFFFF]">
@@ -140,10 +140,10 @@ export const CartDrawer: React.FC = () => {
                     {cart.map((item) => (
                       <motion.div
                         key={item.id}
-                        layout
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, x: -40 }}
+                        exit={{ opacity: 0, x: -30 }}
+                        transition={{ duration: 0.15 }}
                         className="flex items-center gap-3 p-3 rounded-2xl bg-[#FFFFFF] border border-[#E8E1D5] shadow-xs"
                       >
                         {/* Thumbnail */}

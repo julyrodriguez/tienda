@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import {
   Heart,
   Eye,
@@ -38,14 +37,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const displayImage = selectedVariant?.image || product.images[currentImageIndex] || product.images[0];
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, scale: 0.97 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.97 }}
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.25 }}
-      className="group relative flex flex-col rounded-3xl bg-[#FFFFFF] border border-[#E8E1D5] hover:border-[#BA9971] shadow-xs hover:shadow-xl transition-all duration-300 overflow-hidden"
+    <div
+      className="group relative flex flex-col rounded-3xl bg-[#FFFFFF] border border-[#E8E1D5] hover:border-[#BA9971] shadow-xs hover:shadow-lg transition-all duration-200 ease-out hover:-translate-y-1 overflow-hidden gpu-layer"
     >
       {/* Top Image Container */}
       <div className="relative aspect-square w-full overflow-hidden bg-[#FAF7F2] p-2 sm:p-3 flex items-center justify-center">
@@ -66,43 +59,40 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         {/* Wishlist Heart Button */}
-        <motion.button
-          whileHover={{ scale: 1.15 }}
-          whileTap={{ scale: 0.85 }}
+        <button
           onClick={(e) => {
             e.stopPropagation();
             toggleWishlist(product.id);
           }}
-          className="absolute top-2.5 right-2.5 z-10 p-2 rounded-full bg-[#FFFFFF]/90 backdrop-blur-md border border-[#E8E1D5] text-[#78716C] hover:text-rose-600 transition-colors cursor-pointer shadow-xs"
+          className="absolute top-2.5 right-2.5 z-10 p-2 rounded-full bg-[#FFFFFF] border border-[#E8E1D5] text-[#78716C] hover:text-rose-600 transition-transform active:scale-90 cursor-pointer shadow-xs"
           aria-label="Agregar a favoritos"
         >
           <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFavorite ? 'text-rose-500 fill-rose-500' : ''}`} />
-        </motion.button>
+        </button>
 
         {/* Product Image */}
         <img
           src={displayImage}
           alt={product.title}
-          className="w-full h-full object-cover rounded-2xl group-hover:scale-106 transition-transform duration-500"
+          decoding="async"
           loading="lazy"
+          className="w-full h-full object-cover rounded-2xl group-hover:scale-103 transition-transform duration-300 ease-out"
         />
 
-        {/* Quick View Hover / Touch Overlay Button */}
-        <div className="absolute inset-0 bg-[#1C1917]/20 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+        {/* Quick View Hover Button */}
+        <div className="absolute inset-0 bg-[#1C1917]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center p-4">
+          <button
             onClick={() => setQuickViewProduct(product)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#FFFFFF] text-[#1C1917] font-bold text-xs shadow-lg hover:bg-[#F4ECE0] transition-colors cursor-pointer"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#FFFFFF] text-[#1C1917] font-bold text-xs shadow-md hover:bg-[#F4ECE0] transition-all transform active:scale-95 cursor-pointer"
           >
             <Eye className="w-3.5 h-3.5" />
             <span>Vista Rápida</span>
-          </motion.button>
+          </button>
         </div>
 
         {/* Free Shipping Tag bottom */}
         {product.freeShipping && (
-          <div className="absolute bottom-2 left-2 z-10 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#FFFFFF]/90 backdrop-blur-md border border-[#E8E1D5] text-[9px] sm:text-[10px] font-bold text-[#0F766E]">
+          <div className="absolute bottom-2 left-2 z-10 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#FFFFFF] border border-[#E8E1D5] text-[9px] sm:text-[10px] font-bold text-[#0F766E]">
             <Truck className="w-3 h-3 text-[#0F766E]" />
             <span>Envío Gratis</span>
           </div>
@@ -136,7 +126,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             {product.subtitle}
           </p>
 
-          {/* Color Variants Pills if available */}
+          {/* Color Variants */}
           {product.variants && product.variants.length > 0 && (
             <div className="flex items-center gap-1.5 mt-2 pt-2 border-t border-[#E8E1D5]/60">
               <span className="text-[10px] font-bold text-[#78716C] mr-0.5">Versión:</span>
@@ -147,7 +137,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   title={v.name}
                   className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full border-2 transition-all cursor-pointer ${
                     selectedVariant?.id === v.id
-                      ? 'border-[#1C1917] scale-125'
+                      ? 'border-[#1C1917] scale-120'
                       : 'border-[#D8D0C5] hover:border-[#78716C]'
                   }`}
                   style={{ backgroundColor: v.colorHex || '#A8A29E' }}
@@ -171,7 +161,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               )}
             </div>
 
-            {/* Installments info (Tiendanube style) */}
             <p className="text-[10px] sm:text-[11px] font-bold text-[#0F766E] mt-0.5">
               Hasta {product.installmentsMax} cuotas de {formatPrice(currentPrice / product.installmentsMax)}
             </p>
@@ -186,11 +175,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           )}
 
           {/* Add to Cart Button */}
-          <motion.button
-            whileTap={{ scale: 0.96 }}
+          <button
             onClick={() => addToCart(product, selectedVariant, 1)}
             disabled={product.stock === 0}
-            className={`w-full flex items-center justify-center gap-1.5 py-2.5 sm:py-3 px-3 rounded-2xl font-bold text-xs tracking-wide transition-all duration-200 cursor-pointer shadow-xs ${
+            className={`w-full flex items-center justify-center gap-1.5 py-2.5 sm:py-3 px-3 rounded-2xl font-bold text-xs tracking-wide transition-all duration-150 active:scale-97 cursor-pointer shadow-xs ${
               product.stock > 0
                 ? 'bg-[#1C1917] hover:bg-[#292524] text-[#FAF7F2]'
                 : 'bg-[#E8E1D5] text-[#A8A29E] cursor-not-allowed'
@@ -198,9 +186,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           >
             <ShoppingBag className="w-3.5 h-3.5 text-[#DEC9AE]" />
             <span>{product.stock > 0 ? 'Agregar a Bolsa' : 'Agotado'}</span>
-          </motion.button>
+          </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };

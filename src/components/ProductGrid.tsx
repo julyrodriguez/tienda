@@ -76,16 +76,11 @@ export const ProductGrid: React.FC = () => {
 
       {/* Grid or Empty State */}
       {filteredProducts.length > 0 ? (
-        <motion.div
-          layout
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
-        >
-          <AnimatePresence>
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+          {filteredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
       ) : (
         <div className="py-16 text-center rounded-3xl border border-[#E8E1D5] bg-[#FFFFFF] p-6 sm:p-8 max-w-md mx-auto space-y-3 shadow-xs">
           <div className="w-12 h-12 rounded-full bg-[#F4ECE0] border border-[#E8E1D5] mx-auto flex items-center justify-center text-[#78716C]">

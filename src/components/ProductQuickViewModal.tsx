@@ -117,16 +117,16 @@ export const ProductQuickViewModal: React.FC = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={() => setQuickViewProduct(null)}
-          className="fixed inset-0 bg-[#1C1917]/60 backdrop-blur-sm"
+          className="fixed inset-0 bg-[#1C1917]/50"
         />
 
         {/* Modal Dialog */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 15 }}
+          initial={{ opacity: 0, scale: 0.96, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="relative z-10 w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#FFFFFF] border border-[#E8E1D5] shadow-2xl p-4 sm:p-6 md:p-8 text-[#1C1917]"
+          exit={{ opacity: 0, scale: 0.96, y: 10 }}
+          transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.22 }}
+          className="relative z-10 w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#FFFFFF] border border-[#E8E1D5] shadow-2xl p-4 sm:p-6 md:p-8 text-[#1C1917] gpu-layer"
         >
           {/* Close Button */}
           <button
@@ -148,7 +148,7 @@ export const ProductQuickViewModal: React.FC = () => {
                 />
 
                 {quickViewProduct.freeShipping && (
-                  <div className="absolute top-3 left-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FFFFFF]/90 border border-[#E8E1D5] text-[#0F766E] text-[10px] sm:text-xs font-bold backdrop-blur-md">
+                  <div className="absolute top-3 left-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FFFFFF] border border-[#E8E1D5] text-[#0F766E] text-[10px] sm:text-xs font-bold shadow-xs">
                     <Truck className="w-3.5 h-3.5" />
                     <span>Envío Gratis</span>
                   </div>

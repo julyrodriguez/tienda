@@ -137,14 +137,15 @@ Método de Pago: ${completedOrder.paymentMethod}
           onClick={() => {
             if (step !== 4) setIsCheckoutOpen(false);
           }}
-          className="fixed inset-0 bg-[#1C1917]/60 backdrop-blur-sm"
+          className="fixed inset-0 bg-[#1C1917]/50"
         />
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 15 }}
+          initial={{ opacity: 0, scale: 0.96, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative z-10 w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#FFFFFF] border border-[#E8E1D5] shadow-2xl p-4 sm:p-6 md:p-8 text-[#1C1917]"
+          exit={{ opacity: 0, scale: 0.96, y: 10 }}
+          transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.22 }}
+          className="relative z-10 w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#FFFFFF] border border-[#E8E1D5] shadow-2xl p-4 sm:p-6 md:p-8 text-[#1C1917] gpu-layer"
         >
           {/* Header */}
           <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-[#E8E1D5]">
