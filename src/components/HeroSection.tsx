@@ -13,7 +13,7 @@ import {
 import { useStore } from '../context/StoreContext';
 
 export const HeroSection: React.FC = () => {
-  const { products, setQuickViewProduct, addToCart, formatPrice } = useStore();
+  const { products, setQuickViewProduct, addToCart, formatPrice, setCurrentView } = useStore();
   const heroProduct = products[0]; // Aura Sound ANC Pro
 
   return (
@@ -82,13 +82,16 @@ export const HeroSection: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}
               className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 sm:gap-4 pt-1 sm:pt-2"
             >
-              <a
-                href="#catalogo"
+              <button
+                onClick={() => {
+                  setCurrentView('catalog');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
                 className="flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3.5 sm:py-4 rounded-2xl bg-[#1C1917] hover:bg-[#292524] text-[#FAF7F2] font-bold text-xs sm:text-sm shadow-md transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
                 <span>Explorar Catálogo</span>
                 <ArrowRight className="w-4 h-4 text-[#DEC9AE]" />
-              </a>
+              </button>
 
               {heroProduct && (
                 <button

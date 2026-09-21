@@ -4,28 +4,28 @@ import {
   Heart,
   Search,
   SlidersHorizontal,
-  BookOpen,
   X,
   Menu,
-  Sparkles
+  Sparkles,
+  Scale
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Navbar: React.FC = () => {
   const {
+    currentView,
+    setCurrentView,
     cartCount,
     setIsCartOpen,
     wishlist,
     setIsWishlistModalOpen,
     setIsAdminOpen,
-    setIsDocsOpen,
+    setIsLegalModalOpen,
     searchQuery,
     setSearchQuery,
     currency,
     setCurrency,
-    selectedCategory,
-    setSelectedCategory
   } = useStore();
 
   const [isSearchActive, setIsSearchActive] = useState(false);
@@ -56,7 +56,7 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center gap-3 sm:gap-6 shrink-0">
             <button
               onClick={() => {
-                setSelectedCategory('all');
+                setCurrentView('home');
                 setSearchQuery('');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
@@ -81,47 +81,33 @@ export const Navbar: React.FC = () => {
               </div>
             </button>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-1 ml-4 pl-4 border-l border-[#E8E1D5] text-xs font-semibold text-[#57534E]">
+            {/* Desktop Navigation Links - Clean and Focused */}
+            <nav className="hidden lg:flex items-center gap-1.5 ml-4 pl-4 border-l border-[#E8E1D5] text-xs font-semibold text-[#57534E]">
               <button
-                onClick={() => setSelectedCategory('all')}
-                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
-                  selectedCategory === 'all'
-                    ? 'text-[#1C1917] bg-[#EADBC8]/50 font-bold'
+                onClick={() => {
+                  setCurrentView('home');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className={`px-3.5 py-1.5 rounded-xl transition-all cursor-pointer ${
+                  currentView === 'home'
+                    ? 'text-[#1C1917] bg-[#EADBC8] font-bold shadow-xs'
+                    : 'hover:text-[#1C1917] hover:bg-[#F4ECE0]'
+                }`}
+              >
+                Inicio
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentView('catalog');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className={`px-3.5 py-1.5 rounded-xl transition-all cursor-pointer ${
+                  currentView === 'catalog'
+                    ? 'text-[#1C1917] bg-[#EADBC8] font-bold shadow-xs'
                     : 'hover:text-[#1C1917] hover:bg-[#F4ECE0]'
                 }`}
               >
                 Catálogo
-              </button>
-              <button
-                onClick={() => setSelectedCategory('audio')}
-                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
-                  selectedCategory === 'audio'
-                    ? 'text-[#1C1917] bg-[#EADBC8]/50 font-bold'
-                    : 'hover:text-[#1C1917] hover:bg-[#F4ECE0]'
-                }`}
-              >
-                Audio Hi-Fi
-              </button>
-              <button
-                onClick={() => setSelectedCategory('wearables')}
-                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
-                  selectedCategory === 'wearables'
-                    ? 'text-[#1C1917] bg-[#EADBC8]/50 font-bold'
-                    : 'hover:text-[#1C1917] hover:bg-[#F4ECE0]'
-                }`}
-              >
-                Wearables
-              </button>
-              <button
-                onClick={() => setSelectedCategory('gaming')}
-                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
-                  selectedCategory === 'gaming'
-                    ? 'text-[#1C1917] bg-[#EADBC8]/50 font-bold'
-                    : 'hover:text-[#1C1917] hover:bg-[#F4ECE0]'
-                }`}
-              >
-                Gaming
               </button>
             </nav>
           </div>
@@ -184,16 +170,6 @@ export const Navbar: React.FC = () => {
                 USD
               </button>
             </div>
-
-            {/* Architecture Docs Button */}
-            <button
-              onClick={() => setIsDocsOpen(true)}
-              className="hidden xl:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-[#57534E] bg-[#FFFFFF] hover:bg-[#F4ECE0] border border-[#E8E1D5] transition-all cursor-pointer shadow-xs"
-              title="Ver análisis de arquitectura Tiendanube"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-[#C25E38]" />
-              <span>Arquitectura</span>
-            </button>
 
             {/* Admin Cloud Button */}
             <button
@@ -298,26 +274,43 @@ export const Navbar: React.FC = () => {
               transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="lg:hidden overflow-hidden border-t border-[#E8E1D5] bg-[#FAF7F2]"
             >
-              <div className="px-4 py-4 space-y-3.5">
-                <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
-                  {['all', 'audio', 'wearables', 'gaming', 'workstation', 'lifestyle'].map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => {
-                        setSelectedCategory(cat as any);
-                        setMobileMenuOpen(false);
-                      }}
-                      className={`p-2.5 rounded-xl text-left capitalize transition-colors ${
-                        selectedCategory === cat
-                          ? 'bg-[#EADBC8] text-[#1C1917] font-bold border border-[#DEC9AE]'
-                          : 'bg-[#FFFFFF] text-[#57534E] border border-[#E8E1D5]'
-                      }`}
-                    >
-                      {cat === 'all' ? 'Ver Todo' : cat}
-                    </button>
-                  ))}
+              <div className="px-4 py-4 space-y-3">
+                {/* Main Navigation Links */}
+                <div className="space-y-1.5">
+                  <button
+                    onClick={() => {
+                      setCurrentView('home');
+                      setMobileMenuOpen(false);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-bold transition-all ${
+                      currentView === 'home'
+                        ? 'bg-[#1C1917] text-[#FAF7F2] shadow-sm'
+                        : 'bg-[#FFFFFF] text-[#1C1917] border border-[#E8E1D5]'
+                    }`}
+                  >
+                    <span>Inicio</span>
+                    <span className="text-[10px] text-[#A8A29E]">Portada</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setCurrentView('catalog');
+                      setMobileMenuOpen(false);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-bold transition-all ${
+                      currentView === 'catalog'
+                        ? 'bg-[#1C1917] text-[#FAF7F2] shadow-sm'
+                        : 'bg-[#FFFFFF] text-[#1C1917] border border-[#E8E1D5]'
+                    }`}
+                  >
+                    <span>Explorar Catálogo Completo</span>
+                    <span className="px-2 py-0.5 rounded-full bg-[#EADBC8] text-[#78350F] text-[10px] font-bold">Filtros</span>
+                  </button>
                 </div>
 
+                {/* Currency selector */}
                 <div className="pt-2 border-t border-[#E8E1D5] flex items-center justify-between">
                   <span className="text-xs text-[#78716C] font-medium">Moneda:</span>
                   <div className="flex gap-1.5">
@@ -336,16 +329,17 @@ export const Navbar: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Legal Shortcut */}
                 <div className="pt-2 flex flex-col gap-2">
                   <button
                     onClick={() => {
-                      setIsDocsOpen(true);
+                      setIsLegalModalOpen(true);
                       setMobileMenuOpen(false);
                     }}
-                    className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-[#FFFFFF] border border-[#E8E1D5] text-[#1C1917] text-xs font-bold shadow-xs"
+                    className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-[#FFFFFF] border border-[#E8E1D5] text-[#1C1917] text-xs font-bold shadow-xs cursor-pointer"
                   >
-                    <BookOpen className="w-4 h-4 text-[#C25E38]" />
-                    <span>Documentación Tiendanube & Headless</span>
+                    <Scale className="w-4 h-4 text-[#C25E38]" />
+                    <span>Términos, Privacidad & Defensa al Consumidor</span>
                   </button>
                 </div>
               </div>

@@ -46,6 +46,10 @@ interface StoreContextType {
   removeCoupon: () => void;
   discountAmount: number;
 
+  // Views & Routing
+  currentView: 'home' | 'catalog';
+  setCurrentView: (view: 'home' | 'catalog') => void;
+
   // Modals & Drawers
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
@@ -55,10 +59,14 @@ interface StoreContextType {
   setIsCheckoutOpen: (open: boolean) => void;
   isAdminOpen: boolean;
   setIsAdminOpen: (open: boolean) => void;
-  isDocsOpen: boolean;
-  setIsDocsOpen: (open: boolean) => void;
   isWishlistModalOpen: boolean;
   setIsWishlistModalOpen: (open: boolean) => void;
+
+  // Legal Support Modal
+  isLegalModalOpen: boolean;
+  setIsLegalModalOpen: (open: boolean) => void;
+  legalTab: 'terms' | 'privacy' | 'consumer' | 'regret';
+  setLegalTab: (tab: 'terms' | 'privacy' | 'consumer' | 'regret') => void;
 
   // Currency
   currency: 'ARS' | 'USD';
@@ -70,6 +78,7 @@ interface StoreContextType {
   createOrder: (order: Omit<Order, 'id' | 'orderNumber' | 'createdAt'>) => Promise<Order>;
   addProduct: (product: Product) => Promise<void> | void;
   updateProductStock: (productId: string, newStock: number) => Promise<void> | void;
+  deleteProduct: (productId: string) => Promise<void>;
 
   // Toasts
   toasts: ToastMessage[];
@@ -118,13 +127,17 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return saved ? JSON.parse(saved) : [];
   });
 
+  // Views & Routing
+  const [currentView, setCurrentView] = useState<'home' | 'catalog'>('home');
+
   // Modals & Navigation
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
-  const [isDocsOpen, setIsDocsOpen] = useState(false);
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
+  const [isLegalModalOpen, setIsLegalModalOpen] = useState(false);
+  const [legalTab, setLegalTab] = useState<'terms' | 'privacy' | 'consumer' | 'regret'>('terms');
   const [currency, setCurrency] = useState<'ARS' | 'USD'>('ARS');
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
@@ -487,9 +500,30 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
+  const deleteProduct = async (productId: string) => {
+    const target = products.find(p => p.id === productId);
+    setProducts(prev => prev.filter(p => p.id !== productId));
+    addToast({
+      type: 'info',
+      title: 'Producto eliminado',
+      description: target?.title
+    });
+
+    try {
+      await fetch(TIENDA_API.deleteProduct(productId), {
+        method: 'DELETE'
+      });
+    } catch (err) {
+      console.warn('⚠️ Error al eliminar producto en servidor MongoDB:', err);
+    }
+  };
+
   return (
     <StoreContext.Provider
       value={{
+        currentView,
+        setCurrentView,
+
         products,
         selectedCategory,
         setSelectedCategory,
@@ -529,10 +563,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setIsCheckoutOpen,
         isAdminOpen,
         setIsAdminOpen,
-        isDocsOpen,
-        setIsDocsOpen,
         isWishlistModalOpen,
         setIsWishlistModalOpen,
+
+        isLegalModalOpen,
+        setIsLegalModalOpen,
+        legalTab,
+        setLegalTab,
 
         currency,
         setCurrency,
@@ -542,6 +579,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         createOrder,
         addProduct,
         updateProductStock,
+        deleteProduct,
 
         toasts,
         addToast,

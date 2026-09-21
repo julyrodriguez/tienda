@@ -8,7 +8,8 @@ import {
   Plus,
   AlertTriangle,
   DollarSign,
-  Sparkles
+  Sparkles,
+  Trash2
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { Product } from '../types/store';
@@ -20,6 +21,7 @@ export const AdminPanelModal: React.FC = () => {
     products,
     addProduct,
     updateProductStock,
+    deleteProduct,
     orders,
     formatPrice
   } = useStore();
@@ -242,6 +244,7 @@ export const AdminPanelModal: React.FC = () => {
                       <th className="p-2.5 sm:p-3">Precio</th>
                       <th className="p-2.5 sm:p-3">Stock</th>
                       <th className="p-2.5 sm:p-3">Ajustar</th>
+                      <th className="p-2.5 sm:p-3 text-right">Acción</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E8E1D5] text-[#57534E]">
@@ -277,6 +280,19 @@ export const AdminPanelModal: React.FC = () => {
                               +5
                             </button>
                           </div>
+                        </td>
+                        <td className="p-2.5 sm:p-3 text-right">
+                          <button
+                            onClick={() => {
+                              if (window.confirm(`¿Estás seguro de eliminar permanentemente "${p.title}"?`)) {
+                                deleteProduct(p.id);
+                              }
+                            }}
+                            className="p-1.5 rounded-lg text-[#A8A29E] hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-colors cursor-pointer"
+                            title="Eliminar producto"
+                          >
+                            <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                          </button>
                         </td>
                       </tr>
                     ))}
