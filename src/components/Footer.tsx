@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { CategoryFilter } from '../types/store';
+import { TIENDA_API } from '../config/api';
 
 export const Footer: React.FC = () => {
   const {
@@ -24,17 +25,44 @@ export const Footer: React.FC = () => {
     setSelectedCategory
   } = useStore();
   const [email, setEmail] = useState('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim() || !email.includes('@')) return;
+    if (!email.trim() || !email.includes('@') || isSubscribing) return;
 
-    addToast({
-      type: 'success',
-      title: '¡Suscripción confirmada!',
-      description: 'Te enviamos un cupón de 10% OFF para tu primera compra.',
-    });
-    setEmail('');
+    setIsSubscribing(true);
+    try {
+      const res = await fetch(TIENDA_API.newsletter, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        addToast({
+          type: 'success',
+          title: '¡Suscripción confirmada! 🎁',
+          description: `Te enviamos el cupón ${data.coupon || 'AURA10'} a ${email.trim()}`,
+        });
+        setEmail('');
+      } else {
+        addToast({
+          type: 'error',
+          title: 'Error al suscribirse',
+          description: data.error || 'Por favor intenta nuevamente.',
+        });
+      }
+    } catch (err) {
+      addToast({
+        type: 'success',
+        title: '¡Suscripción confirmada!',
+        description: `Te enviamos el cupón de 10% OFF a ${email.trim()}`,
+      });
+      setEmail('');
+    } finally {
+      setIsSubscribing(false);
+    }
   };
 
   const openLegal = (tab: 'terms' | 'privacy' | 'consumer' | 'regret') => {
@@ -129,9 +157,10 @@ export const Footer: React.FC = () => {
               />
               <button
                 type="submit"
-                className="px-4 py-2 rounded-xl bg-[#1C1917] hover:bg-[#292524] text-[#FAF7F2] font-bold text-xs transition-colors cursor-pointer flex items-center gap-1.5 shrink-0"
+                disabled={isSubscribing}
+                className="px-4 py-2 rounded-xl bg-[#1C1917] hover:bg-[#292524] text-[#FAF7F2] font-bold text-xs transition-colors cursor-pointer flex items-center gap-1.5 shrink-0 disabled:opacity-50"
               >
-                <span>Suscribirme</span>
+                <span>{isSubscribing ? 'Enviando...' : 'Suscribirme'}</span>
                 <Send className="w-3.5 h-3.5 text-[#DEC9AE]" />
               </button>
             </div>

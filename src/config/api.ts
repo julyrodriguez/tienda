@@ -7,4 +7,5 @@ export const TIENDA_API = {
   productStock: (id: string) => `${API_BASE_URL}/api/tienda/products/${id}/stock`,
   orders: `${API_BASE_URL}/api/tienda/orders`,
   stats: `${API_BASE_URL}/api/tienda/stats`,
+  newsletter: `${API_BASE_URL}/api/tienda/newsletter`,
 };
