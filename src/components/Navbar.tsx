@@ -1,8 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   ShoppingBag,
   Heart,
-  Search,
   SlidersHorizontal,
   X,
   Menu,
@@ -23,30 +22,11 @@ export const Navbar: React.FC = () => {
     setIsWishlistModalOpen,
     setIsAdminOpen,
     setIsLegalModalOpen,
-    searchQuery,
-    setSearchQuery,
     currency,
     setCurrency,
   } = useStore();
 
-  const [isSearchActive, setIsSearchActive] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        setIsSearchActive(true);
-        setTimeout(() => searchInputRef.current?.focus(), 50);
-      }
-      if (e.key === 'Escape' && isSearchActive) {
-        setIsSearchActive(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isSearchActive]);
 
   return (
     <header className="sticky top-0 z-40 w-full">
@@ -58,7 +38,6 @@ export const Navbar: React.FC = () => {
             <button
               onClick={() => {
                 setCurrentView('home');
-                setSearchQuery('');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               className="flex items-center gap-2.5 sm:gap-3 group text-left cursor-pointer"
@@ -115,40 +94,8 @@ export const Navbar: React.FC = () => {
             </nav>
           </div>
 
-          {/* Search Bar - Desktop */}
-          <div className="flex-1 max-w-sm hidden md:block">
-            <div className="relative group">
-              <input
-                ref={searchInputRef}
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Buscar modelo, tag, categoría... (⌘K)"
-                className="w-full bg-[#FFFFFF] border border-[#E8E1D5] focus:border-[#BA9971] rounded-full py-2 pl-9 pr-8 text-xs text-[#1C1917] placeholder-[#A8A29E] focus:outline-none focus:ring-2 focus:ring-[#BA9971]/20 transition-all shadow-xs"
-              />
-              <Search className="w-3.5 h-3.5 text-[#A8A29E] absolute left-3 top-1/2 -translate-y-1/2 group-focus-within:text-[#78350F] transition-colors" />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="p-1 text-[#A8A29E] hover:text-[#1C1917] absolute right-2.5 top-1/2 -translate-y-1/2"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              )}
-            </div>
-          </div>
-
           {/* Right Action Icons */}
           <div className="flex items-center gap-1.5 sm:gap-2">
-            
-            {/* Search Trigger for Mobile */}
-            <button
-              onClick={() => setIsSearchActive(!isSearchActive)}
-              className="md:hidden p-2 rounded-xl text-[#57534E] hover:text-[#1C1917] hover:bg-[#F4ECE0] transition-colors"
-              aria-label="Buscar"
-            >
-              <Search className="w-4 h-4" />
-            </button>
 
             {/* Currency Selector */}
             <div className="hidden sm:flex items-center bg-[#F4ECE0] p-1 rounded-xl border border-[#E8E1D5] text-[11px] font-bold">
@@ -239,40 +186,6 @@ export const Navbar: React.FC = () => {
             </button>
           </div>
         </div>
-
-        {/* Mobile Search Expandable Bar */}
-        <AnimatePresence>
-          {isSearchActive && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.18, ease: 'easeOut' }}
-              className="md:hidden overflow-hidden border-t border-[#E8E1D5] bg-[#FAF7F2]"
-            >
-              <div className="px-3 py-2.5">
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Buscar en el catálogo..."
-                    className="w-full bg-[#FFFFFF] border border-[#E8E1D5] rounded-xl py-2 pl-8 pr-8 text-xs text-[#1C1917] placeholder-[#A8A29E] focus:outline-none focus:border-[#BA9971]"
-                  />
-                  <Search className="w-3.5 h-3.5 text-[#A8A29E] absolute left-2.5 top-1/2 -translate-y-1/2" />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery('')}
-                      className="p-1 text-[#A8A29E] absolute right-2 top-1/2 -translate-y-1/2"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* Mobile Dropdown Menu */}
         <AnimatePresence>
