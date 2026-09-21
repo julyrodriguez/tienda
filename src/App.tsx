@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { MarqueeBanner } from './components/MarqueeBanner';
 import { Navbar } from './components/Navbar';
@@ -16,6 +16,10 @@ import { Footer } from './components/Footer';
 
 export const AppContent: React.FC = () => {
   const { currentView } = useStore();
+
+  useEffect(() => {
+    document.title = 'Demo - Tienda Online';
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] selection:bg-[#EADBC8] selection:text-[#1C1917]">
