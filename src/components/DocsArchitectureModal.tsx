@@ -4,15 +4,11 @@ import {
   X,
   BookOpen,
   Server,
-  Layers,
   Cpu,
   Database,
-  ArrowRight,
-  Code2,
   CheckCircle2,
   ShieldCheck,
-  Zap,
-  Globe2
+  Zap
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
@@ -24,148 +20,136 @@ export const DocsArchitectureModal: React.FC = () => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 overflow-y-auto">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={() => setIsDocsOpen(false)}
-          className="fixed inset-0 bg-black/85 backdrop-blur-md"
+          className="fixed inset-0 bg-[#1C1917]/60 backdrop-blur-sm"
         />
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative z-10 w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#0B0D16] border border-brand-500/40 shadow-2xl p-6 sm:p-8"
+          exit={{ opacity: 0, scale: 0.95, y: 15 }}
+          className="relative z-10 w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#FFFFFF] border border-[#E8E1D5] shadow-2xl p-4 sm:p-6 md:p-8 text-[#1C1917]"
         >
           {/* Header */}
-          <div className="flex items-center justify-between pb-6 border-b border-white/10">
+          <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-[#E8E1D5]">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-brand-500/10 text-brand-400 border border-brand-500/30">
-                <BookOpen className="w-6 h-6" />
+              <div className="p-2.5 sm:p-3 rounded-2xl bg-[#EADBC8] text-[#78350F] border border-[#DEC9AE]">
+                <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
               <div>
-                <h2 className="font-display font-black text-2xl text-white">
-                  Investigación y Arquitectura: Tiendanube vs Headless Web
+                <h2 className="font-display font-black text-lg sm:text-2xl text-[#1C1917]">
+                  Arquitectura: Tiendanube vs Headless
                 </h2>
-                <p className="text-xs text-slate-400">
-                  Análisis exhaustivo de documentación, flujo de datos, APIs y mejores prácticas 2026.
+                <p className="text-[11px] sm:text-xs text-[#78716C]">
+                  Investigación técnica, modelos de datos, APIs y mejores prácticas.
                 </p>
               </div>
             </div>
 
             <button
               onClick={() => setIsDocsOpen(false)}
-              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
+              className="p-2 rounded-xl bg-[#FAF7F2] hover:bg-[#F4ECE0] text-[#78716C] hover:text-[#1C1917] transition-colors cursor-pointer border border-[#E8E1D5]"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
 
-          {/* Navigation Sub-tabs */}
-          <div className="flex gap-2 pt-4 pb-6 border-b border-white/10 overflow-x-auto text-xs font-bold">
+          {/* Sub-tabs */}
+          <div className="flex gap-1.5 sm:gap-2 pt-3 pb-4 sm:pb-6 border-b border-[#E8E1D5] overflow-x-auto text-xs font-bold scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
             <button
               onClick={() => setActiveSection('tiendanube')}
-              className={`px-4 py-2 rounded-xl transition-all cursor-pointer ${
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl transition-all cursor-pointer whitespace-nowrap ${
                 activeSection === 'tiendanube'
-                  ? 'bg-brand-500 text-slate-950 font-black'
-                  : 'bg-white/5 text-slate-300 hover:text-white'
+                  ? 'bg-[#1C1917] text-white'
+                  : 'bg-[#FAF7F2] text-[#57534E] hover:text-[#1C1917] border border-[#E8E1D5]'
               }`}
             >
-              1. Ecosistema Tiendanube (Nuvemshop)
+              1. Ecosistema Tiendanube
             </button>
             <button
               onClick={() => setActiveSection('headless')}
-              className={`px-4 py-2 rounded-xl transition-all cursor-pointer ${
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl transition-all cursor-pointer whitespace-nowrap ${
                 activeSection === 'headless'
-                  ? 'bg-brand-500 text-slate-950 font-black'
-                  : 'bg-white/5 text-slate-300 hover:text-white'
+                  ? 'bg-[#1C1917] text-white'
+                  : 'bg-[#FAF7F2] text-[#57534E] hover:text-[#1C1917] border border-[#E8E1D5]'
               }`}
             >
-              2. Frontend Headless & Animaciones
+              2. Frontend Headless
             </button>
             <button
               onClick={() => setActiveSection('data-model')}
-              className={`px-4 py-2 rounded-xl transition-all cursor-pointer ${
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl transition-all cursor-pointer whitespace-nowrap ${
                 activeSection === 'data-model'
-                  ? 'bg-brand-500 text-slate-950 font-black'
-                  : 'bg-white/5 text-slate-300 hover:text-white'
+                  ? 'bg-[#1C1917] text-white'
+                  : 'bg-[#FAF7F2] text-[#57534E] hover:text-[#1C1917] border border-[#E8E1D5]'
               }`}
             >
-              3. Modelo de Datos (Products & SKUs)
+              3. Modelo de Datos
             </button>
             <button
               onClick={() => setActiveSection('checkout-pipeline')}
-              className={`px-4 py-2 rounded-xl transition-all cursor-pointer ${
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl transition-all cursor-pointer whitespace-nowrap ${
                 activeSection === 'checkout-pipeline'
-                  ? 'bg-brand-500 text-slate-950 font-black'
-                  : 'bg-white/5 text-slate-300 hover:text-white'
+                  ? 'bg-[#1C1917] text-white'
+                  : 'bg-[#FAF7F2] text-[#57534E] hover:text-[#1C1917] border border-[#E8E1D5]'
               }`}
             >
-              4. Pasarelas de Pago & Logística
+              4. Pagos & Logística
             </button>
           </div>
 
-          {/* Content Sections */}
-          <div className="py-4 space-y-6 text-xs text-slate-300 leading-relaxed">
+          {/* Content */}
+          <div className="py-4 space-y-4 text-xs text-[#57534E] leading-relaxed">
             
             {activeSection === 'tiendanube' && (
-              <div className="space-y-4">
-                <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
-                  <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                    <Server className="w-4 h-4 text-brand-400" />
+              <div className="space-y-3">
+                <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8E1D5] space-y-2">
+                  <h3 className="font-bold text-sm text-[#1C1917] flex items-center gap-2">
+                    <Server className="w-4 h-4 text-[#C25E38]" />
                     ¿Cómo funciona Tiendanube por dentro?
                   </h3>
                   <p>
-                    Tiendanube (líder de e-commerce en Argentina, Brasil y Latinoamérica) opera bajo una arquitectura de <strong>Plataforma SaaS Multinquilino (Multi-tenant)</strong>.
+                    Tiendanube es una plataforma SaaS multinquilino líder en América Latina.
                   </p>
-                  <ul className="list-disc pl-5 space-y-1 text-slate-400">
-                    <li><strong>API REST JSON con OAuth 2.0:</strong> Expone endpoints en <code>api.tiendanube.com/v1/{'{store_id}'}</code> con alcances específicos (<code>read_products</code>, <code>write_orders</code>, <code>write_shipping</code>).</li>
-                    <li><strong>Motor de Plantillas Tradicional:</strong> Históricamente utiliza un motor basado en <em>Liquid / Twig</em> renderizado en servidor.</li>
-                    <li><strong>Webhooks Asíncronos:</strong> Dispara eventos en tiempo real hacia ERPs, CRMs y sistemas de facturación automática (AFIP / Factura Electrónica) ante <code>order/created</code>, <code>order/paid</code>, <code>product/updated</code>.</li>
-                    <li><strong>Ecosistema de Aplicaciones:</strong> Permite inyectar scripts, pasarelas de pago externas (Mercado Pago, Modo, Ualá Bis, Payway) y transportistas (Correo Argentino, Andreani, Envíos Nube).</li>
+                  <ul className="list-disc pl-5 space-y-1 text-[#78716C]">
+                    <li><strong>API REST JSON con OAuth 2.0:</strong> Expone endpoints en <code>api.tiendanube.com/v1/{'{store_id}'}</code> con scopes granulares.</li>
+                    <li><strong>Motor de Plantillas:</strong> Tradicionalmente basado en plantillas <em>Liquid</em> renderizadas por servidor.</li>
+                    <li><strong>Webhooks Asíncronos:</strong> Dispara notificaciones a ERPs y AFIP ante <code>order/created</code>, <code>order/paid</code>, <code>product/updated</code>.</li>
                   </ul>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-brand-500/5 border border-brand-500/20 space-y-2">
-                  <h4 className="font-bold text-white text-xs flex items-center gap-1.5">
-                    <Zap className="w-3.5 h-3.5 text-brand-400" />
-                    Limitaciones tradicionales de Tiendanube y Shopify monolítico:
+                <div className="p-4 rounded-2xl bg-[#F4ECE0] border border-[#DEC9AE] space-y-1.5">
+                  <h4 className="font-bold text-[#78350F] text-xs flex items-center gap-1.5">
+                    <Zap className="w-3.5 h-3.5 text-[#C25E38]" />
+                    Por qué migrar hacia Headless Commerce:
                   </h4>
-                  <p className="text-slate-400">
-                    Las tiendas estándar suelen sufrir de recargas completas de página entre categorías, animaciones rígidas o lentas, y dependencia de plugins de terceros que degradan los Core Web Vitals. Por eso, las marcas líderes mundiales migran a arquitecturas <strong>Headless Commerce</strong> como la de este prototipo.
+                  <p className="text-[#57534E]">
+                    Las tiendas tradicionales sufren recargas completas entre categorías y páginas. Con Headless logramos transiciones sin latencia, físicas fluidas y un diseño visual de máximo nivel.
                   </p>
                 </div>
               </div>
             )}
 
             {activeSection === 'headless' && (
-              <div className="space-y-4">
-                <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
-                  <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                    <Cpu className="w-4 h-4 text-electric-cyan" />
-                    La Revolución Headless: React + Framer Motion
+              <div className="space-y-3">
+                <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8E1D5] space-y-2">
+                  <h3 className="font-bold text-sm text-[#1C1917] flex items-center gap-2">
+                    <Cpu className="w-4 h-4 text-[#78350F]" />
+                    Frontend Headless: React + Framer Motion
                   </h3>
-                  <p>
-                    En este prototipo desacoplamos completamente la interfaz del backend:
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
-                    <div className="p-3 rounded-xl bg-slate-900 border border-white/10 space-y-1">
-                      <span className="font-bold text-brand-300">Física de Resortes (Spring Physics)</span>
-                      <p className="text-[11px] text-slate-400">Animaciones orgánicas en drawers, cards con efecto 3D hover y modales sin caídas de framerate (60-120 FPS fluidos).</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-2">
+                    <div className="p-3 rounded-xl bg-[#FFFFFF] border border-[#E8E1D5] space-y-1">
+                      <span className="font-bold text-[#1C1917]">Físicas de Resortes (Spring)</span>
+                      <p className="text-[11px] text-[#78716C]">Drawers y modales animados orgánicamente a 60–120 FPS sin caídas de rendimiento.</p>
                     </div>
-                    <div className="p-3 rounded-xl bg-slate-900 border border-white/10 space-y-1">
-                      <span className="font-bold text-brand-300">Instant Navigation (Zero Reload)</span>
-                      <p className="text-[11px] text-slate-400">Búsqueda reactiva instantánea, filtros en milisegundos y feedback háptico/visual continuo.</p>
-                    </div>
-                    <div className="p-3 rounded-xl bg-slate-900 border border-white/10 space-y-1">
-                      <span className="font-bold text-brand-300">Microinteracciones de Conversión</span>
-                      <p className="text-[11px] text-slate-400">Barra de progreso de envío gratis dinámica, contador de unidades restantes, confetti al comprar y popups de prueba social.</p>
-                    </div>
-                    <div className="p-3 rounded-xl bg-slate-900 border border-white/10 space-y-1">
-                      <span className="font-bold text-brand-300">Optimización Móvil First</span>
-                      <p className="text-[11px] text-slate-400">Cajones deslizables táctiles y checkout optimizado con auto-rellenado para reducir la fricción.</p>
+                    <div className="p-3 rounded-xl bg-[#FFFFFF] border border-[#E8E1D5] space-y-1">
+                      <span className="font-bold text-[#1C1917]">Navegación Instantánea</span>
+                      <p className="text-[11px] text-[#78716C]">Búsqueda en tiempo real y filtrado en milisegundos sin refrescar la página.</p>
                     </div>
                   </div>
                 </div>
@@ -173,16 +157,13 @@ export const DocsArchitectureModal: React.FC = () => {
             )}
 
             {activeSection === 'data-model' && (
-              <div className="space-y-4">
-                <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
-                  <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                    <Database className="w-4 h-4 text-amber-400" />
-                    Modelo de Datos E-Commerce de Alto Rendimiento
+              <div className="space-y-3">
+                <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8E1D5] space-y-2">
+                  <h3 className="font-bold text-sm text-[#1C1917] flex items-center gap-2">
+                    <Database className="w-4 h-4 text-[#C25E38]" />
+                    Modelo de Datos E-Commerce
                   </h3>
-                  <p>
-                    La estructura de entidades utilizada en este proyecto refleja fielmente las especificaciones de Tiendanube y Shopify:
-                  </p>
-                  <pre className="p-3 rounded-xl bg-slate-950 font-mono text-[11px] text-emerald-400 overflow-x-auto border border-white/10">
+                  <pre className="p-3 rounded-xl bg-[#1C1917] font-mono text-[11px] text-[#DEC9AE] overflow-x-auto">
 {`interface Product {
   id: string;
   title: string;
@@ -190,22 +171,10 @@ export const DocsArchitectureModal: React.FC = () => {
   promoPrice?: number;
   category: string;
   stock: number;
-  variants?: ProductVariant[]; // SKUs con talle, color, stock individual
+  variants?: ProductVariant[]; // SKUs con talle, color, stock
   features: string[];
-  installmentsMax: number;     // Configuración de cuotas sin interés
-  freeShipping?: boolean;      // Regla de envío
-}
-
-interface Order {
-  id: string;
-  orderNumber: string;
-  customer: OrderCustomer;
-  items: CartItem[];
-  paymentMethod: 'credit_card' | 'mercado_pago' | 'bank_transfer';
-  shippingCost: number;
-  discount: number;
-  total: number;
-  status: 'paid' | 'pending' | 'shipped';
+  installmentsMax: number;     // Cuotas sin interés
+  freeShipping?: boolean;      // Regla de envío gratis
 }`}
                   </pre>
                 </div>
@@ -213,32 +182,23 @@ interface Order {
             )}
 
             {activeSection === 'checkout-pipeline' && (
-              <div className="space-y-4">
-                <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
-                  <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    Pasarelas de Pago & Logística en Argentina y Latam
+              <div className="space-y-3">
+                <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8E1D5] space-y-2">
+                  <h3 className="font-bold text-sm text-[#1C1917] flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-[#0F766E]" />
+                    Pasarelas de Pago & Logística
                   </h3>
-                  <p>
-                    Para maximizar la tasa de conversión en la región, las tiendas modernas deben ofrecer:
-                  </p>
-                  <div className="space-y-2 pt-2">
+                  <div className="space-y-2 pt-1">
                     <div className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-[#0F766E] mt-0.5 shrink-0" />
                       <div>
-                        <strong>Planes en Cuotas Sin Interés:</strong> En Argentina, el 78% de las compras de ticket medio/alto se cierran en 3, 6 o 12 cuotas. El cálculo transparente en la ficha de producto dispara la conversión en un +34%.
+                        <strong>Cuotas Sin Interés:</strong> En Argentina, el 78% de compras de ticket medio/alto se cierran en 3 o 6 cuotas.
                       </div>
                     </div>
                     <div className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-[#0F766E] mt-0.5 shrink-0" />
                       <div>
-                        <strong>Incentivo por Transferencia (10-15% OFF):</strong> Reduce comisiones de pasarela de pago (que rondan el 4% al 8% + IVA) y ofrece liquidez inmediata al comercio.
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5" />
-                      <div>
-                        <strong>Cotización por Código Postal:</strong> Integración con APIs de Correo Argentino y Andreani que calculan peso volumétrico y zona tarifaria en tiempo real.
+                        <strong>Descuento por Transferencia (15% OFF):</strong> Ahorro directo en comisiones de pasarela de pago.
                       </div>
                     </div>
                   </div>
@@ -248,13 +208,13 @@ interface Order {
 
           </div>
 
-          {/* Footer CTA */}
-          <div className="pt-6 border-t border-white/10 flex justify-end">
+          {/* Footer */}
+          <div className="pt-4 sm:pt-6 border-t border-[#E8E1D5] flex justify-end">
             <button
               onClick={() => setIsDocsOpen(false)}
-              className="px-6 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-xs shadow-md transition-colors cursor-pointer"
+              className="px-5 py-2.5 rounded-xl bg-[#1C1917] hover:bg-[#292524] text-[#FAF7F2] font-bold text-xs shadow-md transition-colors cursor-pointer"
             >
-              Entendido, volver a la tienda
+              Volver a la tienda
             </button>
           </div>
         </motion.div>

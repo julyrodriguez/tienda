@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Copy, Check, ArrowRight, Zap } from 'lucide-react';
+import { Sparkles, Copy, Check, Zap } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
 export const MarqueeBanner: React.FC = () => {
@@ -11,49 +11,49 @@ export const MarqueeBanner: React.FC = () => {
     setCopied(true);
     addToast({
       type: 'success',
-      title: '¡Código copiado al portapapeles!',
-      description: `Usa ${code} al finalizar tu compra para obtener un 20% de descuento.`,
+      title: '¡Cupón copiado!',
+      description: `Usa ${code} al finalizar para 20% OFF.`,
     });
     setTimeout(() => setCopied(false), 2500);
   };
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-r from-violet-950 via-slate-900 to-teal-950 border-b border-white/10 text-xs py-2 text-slate-200 select-none">
-      <div className="flex items-center justify-between max-w-7xl mx-auto px-4">
-        {/* Left Badge */}
-        <div className="hidden md:flex items-center gap-2 text-brand-400 font-medium tracking-wide">
-          <Zap className="w-3.5 h-3.5 text-brand-400 animate-pulse" />
-          <span className="uppercase tracking-wider text-[11px] font-bold">AURA CLOUD STORE</span>
-          <span className="text-white/20">|</span>
-          <span className="text-slate-300">Arquitectura Headless Next-Gen</span>
+    <div className="relative overflow-hidden bg-[#F4ECE0] border-b border-[#E8E1D5] text-xs py-2 text-[#44403C] select-none">
+      <div className="flex items-center justify-between max-w-7xl mx-auto px-3 sm:px-6">
+        {/* Left Badge - Desktop */}
+        <div className="hidden md:flex items-center gap-2 text-[#78350F] font-medium tracking-wide">
+          <Zap className="w-3.5 h-3.5 text-[#C25E38] animate-pulse" />
+          <span className="uppercase tracking-wider text-[11px] font-bold">AURA STUDIO</span>
+          <span className="text-[#D8D0C5]">|</span>
+          <span className="text-[#57534E]">Edición Minimalista Crema</span>
         </div>
 
         {/* Center Promotion Ticker */}
-        <div className="flex items-center gap-3 mx-auto md:mx-0">
-          <span className="flex items-center gap-1.5 text-amber-300 font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            20% OFF de Inauguración
+        <div className="flex items-center justify-center gap-2 sm:gap-3 mx-auto md:mx-0 text-center w-full md:w-auto">
+          <span className="flex items-center gap-1.5 text-[#9A6B3D] font-bold text-[11px] sm:text-xs">
+            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#C25E38]" />
+            20% OFF Inauguración
           </span>
-          <span className="hidden sm:inline text-slate-400">•</span>
+          <span className="text-[#D8D0C5]">•</span>
           <button
             onClick={() => copyCoupon('MODERNA20')}
-            className="group inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 transition-all cursor-pointer font-mono text-[11px] text-white"
+            className="group inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/80 hover:bg-white border border-[#D8D0C5] transition-all cursor-pointer font-mono text-[11px] text-[#1C1917] shadow-xs"
           >
-            <span>Cupón:</span>
-            <span className="font-bold text-brand-300 tracking-wider">MODERNA20</span>
+            <span className="text-[#78716C] text-[10px]">CUPÓN:</span>
+            <span className="font-bold text-[#C25E38] tracking-wider">MODERNA20</span>
             {copied ? (
-              <Check className="w-3 h-3 text-emerald-400" />
+              <Check className="w-3 h-3 text-[#0F766E]" />
             ) : (
-              <Copy className="w-3 h-3 text-slate-400 group-hover:text-white transition-colors" />
+              <Copy className="w-3 h-3 text-[#A8A29E] group-hover:text-[#1C1917] transition-colors" />
             )}
           </button>
         </div>
 
-        {/* Right Info */}
-        <div className="hidden lg:flex items-center gap-3 text-slate-300">
-          <span className="text-emerald-400 font-medium">⚡ 3 y 6 Cuotas Sin Interés</span>
-          <span className="text-white/20">•</span>
-          <span>Envíos gratis a todo el país desde $250.000</span>
+        {/* Right Info - Desktop */}
+        <div className="hidden lg:flex items-center gap-3 text-[#57534E] text-xs">
+          <span className="text-[#0F766E] font-bold">3 & 6 Cuotas Sin Interés</span>
+          <span className="text-[#D8D0C5]">•</span>
+          <span>Envío gratis desde $250.000</span>
         </div>
       </div>
     </div>

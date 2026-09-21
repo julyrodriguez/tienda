@@ -5,7 +5,6 @@ import {
   RotateCcw,
   Headphones,
   Send,
-  Sparkles,
   Lock,
   BookOpen,
   SlidersHorizontal
@@ -22,81 +21,81 @@ export const Footer: React.FC = () => {
 
     addToast({
       type: 'success',
-      title: '¡Suscripción exitosa!',
-      description: 'Recibirás acceso anticipado a nuestros drops y un cupón de 10% OFF.',
+      title: '¡Suscripción confirmada!',
+      description: 'Te enviamos un cupón de 10% OFF para tu primera compra.',
     });
     setEmail('');
   };
 
   return (
-    <footer className="relative bg-[#06070B] border-t border-white/[0.08] text-slate-400 text-xs overflow-hidden">
+    <footer className="relative bg-[#F4ECE0] border-t border-[#E8E1D5] text-[#57534E] text-xs overflow-hidden">
       {/* Upper features strip */}
-      <div className="border-b border-white/[0.06] py-10 bg-slate-950/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
-            <div className="p-3 rounded-xl bg-brand-500/10 text-brand-400">
-              <Truck className="w-6 h-6" />
+      <div className="border-b border-[#E8E1D5] py-6 sm:py-10 bg-[#FAF7F2]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          <div className="flex items-center gap-3 p-3 sm:p-4 rounded-2xl bg-[#FFFFFF] border border-[#E8E1D5] shadow-xs">
+            <div className="p-2 sm:p-2.5 rounded-xl bg-[#FAF7F2] text-[#0F766E] border border-[#E8E1D5]">
+              <Truck className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="font-bold text-white text-sm">Envíos a Todo el País</h4>
-              <p className="text-slate-400 text-xs">Gratis en compras superiores a $250.000</p>
+              <h4 className="font-bold text-[#1C1917] text-xs sm:text-sm">Envíos a Todo el País</h4>
+              <p className="text-[#78716C] text-[11px]">Gratis desde $250.000</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
-            <div className="p-3 rounded-xl bg-violet-500/10 text-violet-400">
-              <ShieldCheck className="w-6 h-6" />
+          <div className="flex items-center gap-3 p-3 sm:p-4 rounded-2xl bg-[#FFFFFF] border border-[#E8E1D5] shadow-xs">
+            <div className="p-2 sm:p-2.5 rounded-xl bg-[#FAF7F2] text-[#78350F] border border-[#E8E1D5]">
+              <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="font-bold text-white text-sm">Garantía Oficial 2 Años</h4>
-              <p className="text-slate-400 text-xs">Cobertura total contra fallas de fábrica</p>
+              <h4 className="font-bold text-[#1C1917] text-xs sm:text-sm">Garantía Oficial 2 Años</h4>
+              <p className="text-[#78716C] text-[11px]">Cobertura directa de fábrica</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
-            <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400">
-              <RotateCcw className="w-6 h-6" />
+          <div className="flex items-center gap-3 p-3 sm:p-4 rounded-2xl bg-[#FFFFFF] border border-[#E8E1D5] shadow-xs">
+            <div className="p-2 sm:p-2.5 rounded-xl bg-[#FAF7F2] text-[#C25E38] border border-[#E8E1D5]">
+              <RotateCcw className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="font-bold text-white text-sm">30 Días de Devolución</h4>
-              <p className="text-slate-400 text-xs">Prueba tu producto sin riesgos de compra</p>
+              <h4 className="font-bold text-[#1C1917] text-xs sm:text-sm">30 Días de Prueba</h4>
+              <p className="text-[#78716C] text-[11px]">Devolución o cambio sin costo</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
-            <div className="p-3 rounded-xl bg-cyan-500/10 text-cyan-400">
-              <Headphones className="w-6 h-6" />
+          <div className="flex items-center gap-3 p-3 sm:p-4 rounded-2xl bg-[#FFFFFF] border border-[#E8E1D5] shadow-xs">
+            <div className="p-2 sm:p-2.5 rounded-xl bg-[#FAF7F2] text-[#0284C7] border border-[#E8E1D5]">
+              <Headphones className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="font-bold text-white text-sm">Soporte Humano 24/7</h4>
-              <p className="text-slate-400 text-xs">Asistencia por WhatsApp y videollamada</p>
+              <h4 className="font-bold text-[#1C1917] text-xs sm:text-sm">Soporte 24/7</h4>
+              <p className="text-[#78716C] text-[11px]">Asistencia humana vía WhatsApp</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Footer Links & Newsletter */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+      {/* Main Footer Links */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10">
         
         {/* Brand Col */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="lg:col-span-2 space-y-3 sm:space-y-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-slate-950 font-black text-lg">
+            <div className="w-8 h-8 rounded-xl bg-[#1C1917] flex items-center justify-center text-[#FAF7F2] font-black text-lg">
               A
             </div>
-            <span className="font-display font-extrabold text-2xl text-white">
-              AURA<span className="text-brand-400">.</span>
+            <span className="font-display font-extrabold text-xl sm:text-2xl text-[#1C1917]">
+              AURA<span className="text-[#C25E38]">.</span>
             </span>
           </div>
 
-          <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-            E-commerce de próxima generación creado para los entusiastas del diseño industrial, audio audiófilo y periféricos de alto desempeño.
+          <p className="text-xs text-[#78716C] leading-relaxed max-w-sm">
+            E-commerce de diseño y tecnología contemporánea. Creado con arquitectura Headless para ofrecer la máxima velocidad, fluidez y estética minimalista.
           </p>
 
-          {/* Newsletter input */}
+          {/* Newsletter */}
           <form onSubmit={handleSubscribe} className="pt-2 max-w-sm">
-            <label className="text-[11px] font-bold text-slate-300 block mb-1.5 uppercase tracking-wider">
-              Accede a Drops Secretos & Descuentos:
+            <label className="text-[11px] font-bold text-[#1C1917] block mb-1.5 uppercase tracking-wider">
+              Acceso a Novedades & Descuentos:
             </label>
             <div className="flex gap-2">
               <input
@@ -105,72 +104,72 @@ export const Footer: React.FC = () => {
                 placeholder="tu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-400"
+                className="flex-1 bg-[#FFFFFF] border border-[#E8E1D5] rounded-xl px-3.5 py-2 text-xs text-[#1C1917] placeholder-[#A8A29E] focus:outline-none focus:border-[#BA9971]"
               />
               <button
                 type="submit"
-                className="px-4 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-xs transition-colors cursor-pointer flex items-center gap-1.5"
+                className="px-4 py-2 rounded-xl bg-[#1C1917] hover:bg-[#292524] text-[#FAF7F2] font-bold text-xs transition-colors cursor-pointer flex items-center gap-1.5"
               >
                 <span>Unirme</span>
-                <Send className="w-3.5 h-3.5" />
+                <Send className="w-3.5 h-3.5 text-[#DEC9AE]" />
               </button>
             </div>
           </form>
         </div>
 
-        {/* Col 2: Navigation */}
-        <div className="space-y-3">
-          <h4 className="font-bold text-white text-xs uppercase tracking-wider">Ecosistema</h4>
-          <ul className="space-y-2 text-slate-400">
-            <li><a href="#catalogo" className="hover:text-white transition-colors">Catálogo Completo</a></li>
-            <li><a href="#catalogo" className="hover:text-white transition-colors">Audio Hi-Fi Pro</a></li>
-            <li><a href="#catalogo" className="hover:text-white transition-colors">Relojes & Smart Rings</a></li>
-            <li><a href="#catalogo" className="hover:text-white transition-colors">Teclados Custom Hall Effect</a></li>
-            <li><a href="#catalogo" className="hover:text-white transition-colors">Mochilas & EDC</a></li>
+        {/* Col 2: Categories */}
+        <div className="space-y-2.5 sm:space-y-3">
+          <h4 className="font-bold text-[#1C1917] text-xs uppercase tracking-wider">Categorías</h4>
+          <ul className="space-y-2 text-[#78716C]">
+            <li><a href="#catalogo" className="hover:text-[#1C1917] transition-colors">Todos los Productos</a></li>
+            <li><a href="#catalogo" className="hover:text-[#1C1917] transition-colors">Audio Hi-Fi</a></li>
+            <li><a href="#catalogo" className="hover:text-[#1C1917] transition-colors">Smart Watches & Rings</a></li>
+            <li><a href="#catalogo" className="hover:text-[#1C1917] transition-colors">Teclados Custom</a></li>
+            <li><a href="#catalogo" className="hover:text-[#1C1917] transition-colors">Mochilas & Accesorios</a></li>
           </ul>
         </div>
 
-        {/* Col 3: Architecture & Tools */}
-        <div className="space-y-3">
-          <h4 className="font-bold text-white text-xs uppercase tracking-wider">Herramientas Pro</h4>
-          <ul className="space-y-2 text-slate-400">
+        {/* Col 3: Admin & Tech */}
+        <div className="space-y-2.5 sm:space-y-3">
+          <h4 className="font-bold text-[#1C1917] text-xs uppercase tracking-wider">Herramientas</h4>
+          <ul className="space-y-2 text-[#78716C]">
             <li>
               <button
                 onClick={() => setIsDocsOpen(true)}
-                className="hover:text-brand-300 transition-colors flex items-center gap-1.5 text-left"
+                className="hover:text-[#1C1917] transition-colors flex items-center gap-1.5 text-left"
               >
-                <BookOpen className="w-3.5 h-3.5 text-brand-400" />
-                <span>Documentación Tiendanube</span>
+                <BookOpen className="w-3.5 h-3.5 text-[#C25E38]" />
+                <span>Doc Tiendanube</span>
               </button>
             </li>
             <li>
               <button
                 onClick={() => setIsAdminOpen(true)}
-                className="hover:text-brand-300 transition-colors flex items-center gap-1.5 text-left"
+                className="hover:text-[#1C1917] transition-colors flex items-center gap-1.5 text-left"
               >
-                <SlidersHorizontal className="w-3.5 h-3.5 text-brand-400" />
-                <span>Consola Admin Cloud</span>
+                <SlidersHorizontal className="w-3.5 h-3.5 text-[#C25E38]" />
+                <span>Panel Admin Cloud</span>
               </button>
             </li>
-            <li><span className="text-slate-500">API Webhooks Nuvemshop v1</span></li>
-            <li><span className="text-slate-500">Checkout Transparente MP</span></li>
+            <li><span className="text-[#A8A29E]">API Nuvemshop v1</span></li>
+            <li><span className="text-[#A8A29E]">Checkout Mercado Pago</span></li>
           </ul>
         </div>
 
-        {/* Col 4: Seguridad y Medios de Pago */}
-        <div className="space-y-3">
-          <h4 className="font-bold text-white text-xs uppercase tracking-wider">Medios de Pago & Seguridad</h4>
-          <p className="text-[11px] text-slate-400">
-            Aceptamos todas las tarjetas de crédito, débito y transferencias con acreditación inmediata.
+        {/* Col 4: Payments */}
+        <div className="space-y-2.5 sm:space-y-3">
+          <h4 className="font-bold text-[#1C1917] text-xs uppercase tracking-wider">Medios de Pago</h4>
+          <p className="text-[11px] text-[#78716C]">
+            Aceptamos todas las tarjetas de crédito, débito y transferencias bancarias.
           </p>
           <div className="flex flex-wrap gap-1.5 pt-1">
-            <span className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-bold text-slate-300">Mercado Pago</span>
-            <span className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-bold text-slate-300">Visa</span>
-            <span className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-bold text-slate-300">Mastercard</span>
-            <span className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-bold text-slate-300">MODO</span>
-            <span className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-bold text-slate-300">Transferencia 15% OFF</span>
+            <span className="px-2 py-1 rounded-lg bg-[#FFFFFF] border border-[#E8E1D5] text-[10px] font-bold text-[#1C1917]">Mercado Pago</span>
+            <span className="px-2 py-1 rounded-lg bg-[#FFFFFF] border border-[#E8E1D5] text-[10px] font-bold text-[#1C1917]">Visa</span>
+            <span className="px-2 py-1 rounded-lg bg-[#FFFFFF] border border-[#E8E1D5] text-[10px] font-bold text-[#1C1917]">Mastercard</span>
+            <span className="px-2 py-1 rounded-lg bg-[#FFFFFF] border border-[#E8E1D5] text-[10px] font-bold text-[#1C1917]">MODO</span>
+            <span className="px-2 py-1 rounded-lg bg-[#EADBC8] border border-[#DEC9AE] text-[10px] font-bold text-[#78350F]">Transferencia 15% OFF</span>
           </div>
-          <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 pt-2 font-medium">
+          <div className="flex items-center gap-1.5 text-[11px] text-[#0F766E] pt-1 font-semibold">
             <Lock className="w-3.5 h-3.5" />
             <span>Encriptación bancaria TLS 1.3 / SSL</span>
           </div>
@@ -179,15 +178,15 @@ export const Footer: React.FC = () => {
       </div>
 
       {/* Bottom Legal bar */}
-      <div className="border-t border-white/[0.06] py-6 bg-black/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
-          <p>© 2026 AURA™ Cloud Store. Todos los derechos reservados. Desarrollado con estándar Headless React & Tailwind.</p>
-          <div className="flex items-center gap-4">
-            <span className="text-slate-400">Términos de Servicio</span>
+      <div className="border-t border-[#E8E1D5] py-4 sm:py-6 bg-[#EADBC8]/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#78716C] text-center sm:text-left">
+          <p>© 2026 AURA™ Cloud Store. Todos los derechos reservados. Desarrollado con React 18, Vite y Framer Motion.</p>
+          <div className="flex items-center justify-center gap-3">
+            <span className="hover:text-[#1C1917] cursor-pointer">Términos</span>
             <span>•</span>
-            <span className="text-slate-400">Política de Privacidad</span>
+            <span className="hover:text-[#1C1917] cursor-pointer">Privacidad</span>
             <span>•</span>
-            <span className="text-slate-400">Defensa del Consumidor</span>
+            <span className="hover:text-[#1C1917] cursor-pointer">Defensa del Consumidor</span>
           </div>
         </div>
       </div>

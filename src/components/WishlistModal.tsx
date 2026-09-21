@@ -20,94 +20,94 @@ export const WishlistModal: React.FC = () => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 overflow-y-auto">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={() => setIsWishlistModalOpen(false)}
-          className="fixed inset-0 bg-black/80 backdrop-blur-md"
+          className="fixed inset-0 bg-[#1C1917]/60 backdrop-blur-sm"
         />
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative z-10 w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl bg-[#0F111C] border border-rose-500/30 shadow-2xl p-6 sm:p-8"
+          exit={{ opacity: 0, scale: 0.95, y: 15 }}
+          className="relative z-10 w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl bg-[#FFFFFF] border border-[#E8E1D5] shadow-2xl p-4 sm:p-6 md:p-8 text-[#1C1917]"
         >
           {/* Header */}
-          <div className="flex items-center justify-between pb-6 border-b border-white/10">
+          <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-[#E8E1D5]">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                <Heart className="w-6 h-6 fill-rose-500" />
+              <div className="p-2.5 sm:p-3 rounded-2xl bg-rose-50 text-rose-600 border border-rose-200">
+                <Heart className="w-5 h-5 sm:w-6 sm:h-6 fill-rose-500" />
               </div>
               <div>
-                <h2 className="font-display font-black text-2xl text-white">
+                <h2 className="font-display font-black text-lg sm:text-2xl text-[#1C1917]">
                   Lista de Deseos ({favoritedProducts.length})
                 </h2>
-                <p className="text-xs text-slate-400">
-                  Tus productos guardados listos para comprar cuando quieras.
+                <p className="text-[11px] sm:text-xs text-[#78716C]">
+                  Tus productos favoritos guardados.
                 </p>
               </div>
             </div>
 
             <button
               onClick={() => setIsWishlistModalOpen(false)}
-              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
+              className="p-2 rounded-xl bg-[#FAF7F2] hover:bg-[#F4ECE0] text-[#78716C] hover:text-[#1C1917] transition-colors cursor-pointer border border-[#E8E1D5]"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
 
-          {/* List or Empty State */}
-          <div className="py-6 space-y-3">
+          {/* List */}
+          <div className="py-4 space-y-2.5">
             {favoritedProducts.length > 0 ? (
               favoritedProducts.map((p) => (
                 <div
                   key={p.id}
-                  className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all"
+                  className="flex items-center justify-between p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E1D5] hover:border-[#BA9971] transition-all"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
                     <img
                       src={p.images[0]}
                       alt={p.title}
-                      className="w-14 h-14 rounded-xl object-cover bg-slate-900 border border-white/10"
+                      className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl object-cover bg-[#FFFFFF] border border-[#E8E1D5] shrink-0"
                     />
-                    <div>
-                      <h4 className="font-bold text-white text-sm">{p.title}</h4>
-                      <p className="text-xs text-brand-300 font-bold">
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-[#1C1917] text-xs sm:text-sm truncate max-w-[140px] sm:max-w-[240px]">{p.title}</h4>
+                      <p className="text-xs text-[#C25E38] font-bold">
                         {formatPrice(p.promoPrice || p.price)}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 shrink-0">
                     <button
                       onClick={() => {
                         addToCart(p);
                         setIsWishlistModalOpen(false);
                       }}
-                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-xs shadow-md transition-colors"
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#1C1917] hover:bg-[#292524] text-[#FAF7F2] font-bold text-xs shadow-xs transition-colors"
                     >
-                      <ShoppingBag className="w-3.5 h-3.5" />
-                      <span>Al Carrito</span>
+                      <ShoppingBag className="w-3.5 h-3.5 text-[#DEC9AE]" />
+                      <span className="hidden sm:inline">Añadir</span>
                     </button>
                     <button
                       onClick={() => toggleWishlist(p.id)}
-                      className="p-2 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
-                      title="Eliminar de favoritos"
+                      className="p-1.5 rounded-xl text-[#A8A29E] hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                      title="Quitar"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
               ))
             ) : (
-              <div className="py-12 text-center text-slate-400 space-y-3">
-                <Heart className="w-12 h-12 text-slate-600 mx-auto" />
-                <p className="text-sm font-semibold">Tu lista de deseos está vacía</p>
-                <p className="text-xs text-slate-500">
-                  Explora el catálogo y pulsa el corazón en los productos que más te gusten.
+              <div className="py-10 text-center text-[#78716C] space-y-2">
+                <Heart className="w-10 h-10 text-[#D8D0C5] mx-auto" />
+                <p className="text-xs font-bold text-[#1C1917]">Tu lista está vacía</p>
+                <p className="text-[11px] text-[#A8A29E]">
+                  Pulsa el corazón en los productos del catálogo para guardarlos aquí.
                 </p>
               </div>
             )}

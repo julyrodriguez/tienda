@@ -17,7 +17,7 @@ import { Footer } from './components/Footer';
 
 export const AppContent: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-[#07080D] text-slate-100 selection:bg-brand-500 selection:text-black">
+    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#1C1917] selection:bg-[#EADBC8] selection:text-[#1C1917]">
       {/* Top Announcement Marquee */}
       <MarqueeBanner />
 

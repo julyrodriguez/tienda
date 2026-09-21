@@ -4,34 +4,37 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        brand: {
-          50: '#f0fdfa',
-          100: '#ccfbf1',
-          200: '#99f6e4',
-          300: '#5eead4',
-          400: '#2dd4bf',
-          500: '#14b8a6',
-          600: '#0d9488',
-          700: '#0f766e',
-          800: '#115e59',
-          900: '#134e4a',
+        cream: {
+          50: '#FDFBF7',
+          100: '#FAF6EE',
+          200: '#F4ECE0',
+          300: '#EADBC8',
+          400: '#DEC9AE',
+          500: '#CFB28E',
+          600: '#BA9971',
+          700: '#9E7C55',
+          800: '#7F6242',
+          900: '#5F482F',
         },
-        electric: {
-          violet: '#8B5CF6',
-          cyan: '#06B6D4',
-          pink: '#EC4899',
-          amber: '#F59E0B',
-          emerald: '#10B981',
+        warm: {
+          bg: '#FAF7F2',
+          card: '#FFFFFF',
+          surface: '#F4EFE8',
+          border: '#E8E1D5',
+          muted: '#8C8275',
+          dark: '#1C1917',
+          charcoal: '#292524'
         },
-        dark: {
-          bg: '#0A0B10',
-          card: '#12141F',
-          surface: '#181A27',
-          border: '#25283B'
+        accent: {
+          terracotta: '#C25E38',
+          amber: '#D97706',
+          sand: '#E6D7C3',
+          bronze: '#9A6B3D',
+          emerald: '#0F766E',
+          sage: '#4D7C0F'
         }
       },
       fontFamily: {
@@ -42,20 +45,15 @@ export default {
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'float': 'float 6s ease-in-out infinite',
         'marquee': 'marquee 25s linear infinite',
-        'shimmer': 'shimmer 2.5s linear infinite',
       },
       keyframes: {
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
+          '50%': { transform: 'translateY(-8px)' },
         },
         marquee: {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-50%)' },
-        },
-        shimmer: {
-          '0%': { backgroundPosition: '-200% 0' },
-          '100%': { backgroundPosition: '200% 0' },
         }
       }
     },
