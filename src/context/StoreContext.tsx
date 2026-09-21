@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { Product, ProductVariant, CartItem, Coupon, Order, CategoryFilter } from '../types/store';
 import { INITIAL_PRODUCTS, AVAILABLE_COUPONS } from '../data/mockData';
+import { TIENDA_API } from '../config/api';
 
 interface ToastMessage {
   id: string;
@@ -362,7 +363,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     const loadDataFromServer = async () => {
       try {
-        const prodRes = await fetch('/api/tienda/products');
+        const prodRes = await fetch(TIENDA_API.products);
         if (prodRes.ok) {
           const data = await prodRes.json();
           if (data.success && data.products && data.products.length > 0) {
@@ -374,7 +375,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
 
       try {
-        const ordRes = await fetch('/api/tienda/orders');
+        const ordRes = await fetch(TIENDA_API.orders);
         if (ordRes.ok) {
           const data = await ordRes.json();
           if (data.success && data.orders) {
@@ -392,7 +393,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Order Creation (persisted in MongoDB server + Nodemailer receipt email)
   const createOrder = async (orderData: Omit<Order, 'id' | 'orderNumber' | 'createdAt'>): Promise<Order> => {
     try {
-      const res = await fetch('/api/tienda/orders', {
+      const res = await fetch(TIENDA_API.orders, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData)
@@ -406,7 +407,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
           // Refresh catalog to reflect new real-time stocks from DB
           try {
-            const refreshRes = await fetch('/api/tienda/products');
+            const refreshRes = await fetch(TIENDA_API.products);
             if (refreshRes.ok) {
               const refreshData = await refreshRes.json();
               if (refreshData.products) setProducts(refreshData.products);
@@ -439,7 +440,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const addProduct = async (newProduct: Product) => {
     try {
-      const res = await fetch('/api/tienda/products', {
+      const res = await fetch(TIENDA_API.products, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newProduct)
@@ -476,7 +477,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     );
 
     try {
-      await fetch(`/api/tienda/products/${productId}/stock`, {
+      await fetch(TIENDA_API.productStock(productId), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ stock: newStock })
