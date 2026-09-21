@@ -99,7 +99,7 @@ export const AdminPanelModal: React.FC = () => {
               <div>
                 <div className="flex items-center gap-2">
                   <h2 className="font-display font-black text-lg sm:text-2xl text-[#1C1917]">
-                    Consola Admin Cloud
+                    Consola Admin
                   </h2>
                   <span className="px-2 py-0.5 rounded-full bg-[#EADBC8] text-[#78350F] text-[10px] sm:text-xs font-bold">
                     TIENDANUBE SYNC

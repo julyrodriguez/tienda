@@ -171,14 +171,14 @@ export const Navbar: React.FC = () => {
               </button>
             </div>
 
-            {/* Admin Cloud Button */}
+            {/* Admin Button */}
             <button
               onClick={() => setIsAdminOpen(true)}
               className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold text-[#78350F] bg-[#F4ECE0] hover:bg-[#EADBC8] border border-[#DEC9AE] transition-all cursor-pointer shadow-xs"
               title="Panel de Administrador"
             >
               <SlidersHorizontal className="w-3.5 h-3.5 text-[#C25E38]" />
-              <span className="hidden sm:inline">Admin Cloud</span>
+              <span className="hidden sm:inline">Admin</span>
             </button>
 
             {/* Wishlist Button */}
