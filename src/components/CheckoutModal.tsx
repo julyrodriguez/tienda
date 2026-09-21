@@ -71,6 +71,7 @@ export const CheckoutModal: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState<'credit_card' | 'mercado_pago' | 'bank_transfer'>('credit_card');
   const [installments, setInstallments] = useState(6);
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   if (!isCheckoutOpen) return null;
 
@@ -84,27 +85,34 @@ export const CheckoutModal: React.FC = () => {
 
   const finalTotal = Math.max(0, cartSubtotal - discountAmount - bankTransferDiscount + actualShippingCost);
 
-  const handleFinishPurchase = () => {
-    const order = createOrder({
-      customer,
-      items: cart,
-      subtotal: cartSubtotal,
-      discount: discountAmount + bankTransferDiscount,
-      shippingCost: actualShippingCost,
-      total: finalTotal,
-      paymentMethod,
-      installments: paymentMethod === 'credit_card' ? installments : undefined,
-      status: paymentMethod === 'bank_transfer' ? 'pending' : 'paid'
-    });
+  const handleFinishPurchase = async () => {
+    setIsProcessing(true);
+    try {
+      const order = await createOrder({
+        customer,
+        items: cart,
+        subtotal: cartSubtotal,
+        discount: discountAmount + bankTransferDiscount,
+        shippingCost: actualShippingCost,
+        total: finalTotal,
+        paymentMethod,
+        installments: paymentMethod === 'credit_card' ? installments : undefined,
+        status: paymentMethod === 'bank_transfer' ? 'pending' : 'paid'
+      });
 
-    setCompletedOrder(order);
-    setStep(4);
+      setCompletedOrder(order);
+      setStep(4);
 
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.5 }
-    });
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.5 }
+      });
+    } catch (err) {
+      console.error('Error al procesar compra:', err);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleWhatsAppRedirect = () => {
@@ -446,10 +454,15 @@ Método de Pago: ${completedOrder.paymentMethod}
                 </button>
                 <button
                   onClick={handleFinishPurchase}
-                  className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-6 sm:px-8 py-3 rounded-2xl bg-[#1C1917] hover:bg-[#292524] text-[#FAF7F2] font-black text-xs sm:text-sm shadow-md transition-all cursor-pointer active:scale-98"
+                  disabled={isProcessing}
+                  className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-6 sm:px-8 py-3 rounded-2xl font-black text-xs sm:text-sm shadow-md transition-all cursor-pointer active:scale-98 ${
+                    isProcessing
+                      ? 'bg-[#BA9971] text-white opacity-80 cursor-wait'
+                      : 'bg-[#1C1917] hover:bg-[#292524] text-[#FAF7F2]'
+                  }`}
                 >
                   <CheckCircle className="w-4 h-4 text-[#DEC9AE]" />
-                  <span>Confirmar y Pagar • {formatPrice(finalTotal)}</span>
+                  <span>{isProcessing ? 'Procesando Pago Seguro...' : `Confirmar y Pagar • ${formatPrice(finalTotal)}`}</span>
                 </button>
               </div>
             </div>

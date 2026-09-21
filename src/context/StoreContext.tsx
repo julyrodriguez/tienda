@@ -66,9 +66,9 @@ interface StoreContextType {
 
   // Admin & Orders
   orders: Order[];
-  createOrder: (order: Omit<Order, 'id' | 'orderNumber' | 'createdAt'>) => Order;
-  addProduct: (product: Product) => void;
-  updateProductStock: (productId: string, newStock: number) => void;
+  createOrder: (order: Omit<Order, 'id' | 'orderNumber' | 'createdAt'>) => Promise<Order>;
+  addProduct: (product: Product) => Promise<void> | void;
+  updateProductStock: (productId: string, newStock: number) => Promise<void> | void;
 
   // Toasts
   toasts: ToastMessage[];
@@ -358,9 +358,72 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return result;
   }, [products, selectedCategory, searchQuery, inStockOnly, sortBy]);
 
-  // Order Creation
-  const createOrder = (orderData: Omit<Order, 'id' | 'orderNumber' | 'createdAt'>): Order => {
-    const newOrder: Order = {
+  // Load products & orders from MongoDB server on mount
+  useEffect(() => {
+    const loadDataFromServer = async () => {
+      try {
+        const prodRes = await fetch('/api/tienda/products');
+        if (prodRes.ok) {
+          const data = await prodRes.json();
+          if (data.success && data.products && data.products.length > 0) {
+            setProducts(data.products);
+          }
+        }
+      } catch (err) {
+        console.warn('⚠️ No se pudo conectar con backend MongoDB para productos, usando cache local:', err);
+      }
+
+      try {
+        const ordRes = await fetch('/api/tienda/orders');
+        if (ordRes.ok) {
+          const data = await ordRes.json();
+          if (data.success && data.orders) {
+            setOrders(data.orders);
+          }
+        }
+      } catch (err) {
+        console.warn('⚠️ No se pudo conectar con backend MongoDB para órdenes:', err);
+      }
+    };
+
+    loadDataFromServer();
+  }, []);
+
+  // Order Creation (persisted in MongoDB server + Nodemailer receipt email)
+  const createOrder = async (orderData: Omit<Order, 'id' | 'orderNumber' | 'createdAt'>): Promise<Order> => {
+    try {
+      const res = await fetch('/api/tienda/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      });
+
+      if (res.ok) {
+        const result = await res.json();
+        if (result.success && result.order) {
+          const serverOrder = result.order;
+          setOrders(prev => [serverOrder, ...prev]);
+
+          // Refresh catalog to reflect new real-time stocks from DB
+          try {
+            const refreshRes = await fetch('/api/tienda/products');
+            if (refreshRes.ok) {
+              const refreshData = await refreshRes.json();
+              if (refreshData.products) setProducts(refreshData.products);
+            }
+          } catch (e) {}
+
+          clearCart();
+          setAppliedCoupon(null);
+          return serverOrder;
+        }
+      }
+    } catch (err) {
+      console.warn('⚠️ Error al comunicarse con servidor para procesar orden, usando fallback local:', err);
+    }
+
+    // Fallback in case backend server is offline
+    const fallbackOrder: Order = {
       ...orderData,
       id: `ord-${Date.now()}`,
       orderNumber: `AUR-${Math.floor(100000 + Math.random() * 900000)}`,
@@ -368,28 +431,36 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       trackingNumber: `TRACK-AR-${Math.floor(10000000 + Math.random() * 90000000)}`,
     };
 
-    setOrders(prev => [newOrder, ...prev]);
-
-    // Deduct stock
-    setProducts(prevProds =>
-      prevProds.map(prod => {
-        const matchingCartItem = orderData.items.find(i => i.productId === prod.id);
-        if (matchingCartItem) {
-          return {
-            ...prod,
-            stock: Math.max(0, prod.stock - matchingCartItem.quantity),
-          };
-        }
-        return prod;
-      })
-    );
-
+    setOrders(prev => [fallbackOrder, ...prev]);
     clearCart();
     setAppliedCoupon(null);
-    return newOrder;
+    return fallbackOrder;
   };
 
-  const addProduct = (newProduct: Product) => {
+  const addProduct = async (newProduct: Product) => {
+    try {
+      const res = await fetch('/api/tienda/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newProduct)
+      });
+      if (res.ok) {
+        const result = await res.json();
+        if (result.product) {
+          setProducts(prev => [result.product, ...prev]);
+          addToast({
+            type: 'success',
+            title: 'Producto guardado en MongoDB',
+            description: newProduct.title,
+          });
+          return;
+        }
+      }
+    } catch (err) {
+      console.warn('⚠️ Error al guardar producto en servidor:', err);
+    }
+
+    // Local fallback
     setProducts(prev => [newProduct, ...prev]);
     addToast({
       type: 'success',
@@ -398,10 +469,21 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   };
 
-  const updateProductStock = (productId: string, newStock: number) => {
+  const updateProductStock = async (productId: string, newStock: number) => {
+    // Optimistic local update
     setProducts(prev =>
       prev.map(p => (p.id === productId ? { ...p, stock: newStock } : p))
     );
+
+    try {
+      await fetch(`/api/tienda/products/${productId}/stock`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stock: newStock })
+      });
+    } catch (err) {
+      console.warn('⚠️ Error al actualizar stock en servidor MongoDB:', err);
+    }
   };
 
   return (
