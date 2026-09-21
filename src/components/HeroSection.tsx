@@ -72,7 +72,7 @@ export const HeroSection: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
               className="text-[#57534E] text-sm sm:text-base lg:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal"
             >
-              Comercio electrónico de última generación conectado a tu servidor y base de datos MongoDB. Experiencias ultrarrápidas, checkout guiado en 3 pasos y envíos prioritarios en 24 horas.
+              Tu tienda de electrónica de vanguardia 100% personalizada. Dispositivos de audio Hi-Fi, wearables y periféricos premium configurados a tu medida, con atención exclusiva, garantía oficial y envíos prioritarios a todo el país.
             </motion.p>
 
             {/* Action Buttons */}
