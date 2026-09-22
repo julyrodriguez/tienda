@@ -79,7 +79,7 @@ Tras investigar la documentación oficial de la **API de Tiendanube (Nuvemshop)*
 
 ```bash
 # Entrar a la carpeta del proyecto
-cd /home/julian/vacas-locas/tienda
+cd /home/tienda
 
 # Instalar dependencias (ya instaladas)
 npm install
